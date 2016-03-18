@@ -3,20 +3,21 @@ package se.anviken.owmanager.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
-
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * The persistent class for the sensors database table.
  * 
  */
 @Entity
-@Table(name="sensors")
-@NamedQuery(name="Sensor.findAll", query="SELECT s FROM Sensor s")
+@Table(name = "sensors")
+@NamedQuery(name = "Sensor.findAll", query = "SELECT s FROM Sensor s")
+@XmlRootElement
 public class Sensor implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="sensor_id")
+	@Column(name = "sensor_id")
 	private int sensorId;
 
 	private String address;
@@ -24,22 +25,22 @@ public class Sensor implements Serializable {
 	private String description;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="last_logged")
+	@Column(name = "last_logged")
 	private Date lastLogged;
 
-	@Column(name="last_logged_temp")
+	@Column(name = "last_logged_temp")
 	private float lastLoggedTemp;
 
 	private String name;
 
 	private int offset;
 
-	@Column(name="reset_interval")
+	@Column(name = "reset_interval")
 	private int resetInterval;
 
 	//uni-directional many-to-one association to SensorType
 	@ManyToOne
-	@JoinColumn(name="sensor_type_id")
+	@JoinColumn(name = "sensor_type_id")
 	private SensorType sensorType;
 
 	public Sensor() {

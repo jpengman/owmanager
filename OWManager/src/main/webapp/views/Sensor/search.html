@@ -1,0 +1,116 @@
+<div class="form-horizontal">
+    <h3>Create a new Sensor</h3>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-sm-2">
+            <a id="Create" name="Create" class="btn btn-primary" href="#/Sensors/new"><span class="glyphicon glyphicon-plus-sign"></span> Create</a>
+        </div>
+    </div>
+</div>
+<hr/>
+<div>
+    <h3>Search for Sensors</h3>
+    <form id="SensorSearch" class="form-horizontal">
+        
+    <div class="form-group">
+        <label for="address" class="col-sm-2 control-label">Address</label>
+        <div class="col-sm-10">
+            <input id="address" name="address" class="form-control" type="text" ng-model="search.address" placeholder="Enter the Sensor Address"></input>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="description" class="col-sm-2 control-label">Description</label>
+        <div class="col-sm-10">
+            <input id="description" name="description" class="form-control" type="text" ng-model="search.description" placeholder="Enter the Sensor Description"></input>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label for="lastLoggedTemp" class="col-sm-2 control-label">Last Logged Temp</label>
+        <div class="col-sm-10">
+            <input id="lastLoggedTemp" name="lastLoggedTemp" class="form-control" type="text" ng-model="search.lastLoggedTemp" placeholder="Enter the Sensor Last Logged Temp"></input>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="name" class="col-sm-2 control-label">Name</label>
+        <div class="col-sm-10">
+            <input id="name" name="name" class="form-control" type="text" ng-model="search.name" placeholder="Enter the Sensor Name"></input>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="offset" class="col-sm-2 control-label">Offset</label>
+        <div class="col-sm-10">
+            <input id="offset" name="offset" class="form-control" type="text" ng-model="search.offset" placeholder="Enter the Sensor Offset"></input>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="resetInterval" class="col-sm-2 control-label">Reset Interval</label>
+        <div class="col-sm-10">
+            <input id="resetInterval" name="resetInterval" class="form-control" type="text" ng-model="search.resetInterval" placeholder="Enter the Sensor Reset Interval"></input>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="sensorType" class="col-sm-2 control-label">Sensor Type</label>
+        <div class="col-sm-10">
+            <select id="sensorType" name="sensorType" class="form-control" ng-model="search.sensorType" ng-options="s as s.description for s in sensorTypeList">
+                <option value="">Choose a Sensor Type</option>
+            </select>
+        </div>
+    </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-sm-10">
+                <a id="Search" name="Search" class="btn btn-primary" ng-click="performSearch()"><span class="glyphicon glyphicon-search"></span> Search</a>
+            </div>
+        </div>
+    </form>
+</div>
+<div id="search-results">
+        <div class="table-responsive">
+        <table class="table table-responsive table-bordered table-striped clearfix">
+            <thead>
+                <tr>
+                    <th>Address</th>
+                    <th>Description</th>
+                    <th>Last Logged</th>
+                    <th>Last Logged Temp</th>
+                    <th>Name</th>
+                    <th>Offset</th>
+                    <th>Reset Interval</th>
+                    <th>Sensor Type</th>
+                </tr>
+            </thead>
+            <tbody id="search-results-body">
+                <tr ng-repeat="result in filteredResults | startFrom:currentPage*pageSize | limitTo:pageSize">
+                    <td><a href="#/Sensors/edit/{{result.sensorId}}">{{result.address}}</a></td>
+                    <td><a href="#/Sensors/edit/{{result.sensorId}}">{{result.description}}</a></td>
+                    <td><a href="#/Sensors/edit/{{result.sensorId}}">{{result.lastLogged| date:'yyyy-MM-dd HH:mm:ss Z'}}</a></td>
+                    <td><a href="#/Sensors/edit/{{result.sensorId}}">{{result.lastLoggedTemp}}</a></td>
+                    <td><a href="#/Sensors/edit/{{result.sensorId}}">{{result.name}}</a></td>
+                    <td><a href="#/Sensors/edit/{{result.sensorId}}">{{result.offset}}</a></td>
+                    <td><a href="#/Sensors/edit/{{result.sensorId}}">{{result.resetInterval}}</a></td>
+                        <td><a href="#/Sensors/edit/{{result.sensorId}}">{{result.sensorType.description}}</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+        <ul class="pagination pagination-centered">
+        <li ng-class="{disabled:currentPage == 0}">
+            <a id="prev" href ng-click="previous()">«</a>
+        </li>
+        <li ng-repeat="n in pageRange" ng-class="{active:currentPage == n}" ng-click="setPage(n)">
+            <a href ng-bind="n + 1">1</a>
+        </li>
+        <li ng-class="{disabled: currentPage == (numberOfPages() - 1)}">
+            <a id="next" href ng-click="next()">»</a>
+        </li>
+    </ul>
+
+</div>

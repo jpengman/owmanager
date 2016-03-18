@@ -3,31 +3,32 @@ package se.anviken.owmanager.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
-
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * The persistent class for the temperatures_archive database table.
  * 
  */
 @Entity
-@Table(name="temperatures_archive")
-@NamedQuery(name="TemperaturesArchive.findAll", query="SELECT t FROM TemperaturesArchive t")
+@Table(name = "temperatures_archive")
+@NamedQuery(name = "TemperaturesArchive.findAll", query = "SELECT t FROM TemperaturesArchive t")
+@XmlRootElement
 public class TemperaturesArchive implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="temperature_id")
+	@Column(name = "temperature_id")
 	private int temperatureId;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="temp_timestamp")
+	@Column(name = "temp_timestamp")
 	private Date tempTimestamp;
 
 	private float temperature;
 
 	//uni-directional many-to-one association to Sensor
 	@ManyToOne
-	@JoinColumn(name="sensor_id")
+	@JoinColumn(name = "sensor_id")
 	private Sensor sensor;
 
 	public TemperaturesArchive() {

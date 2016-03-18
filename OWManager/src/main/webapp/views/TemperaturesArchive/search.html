@@ -1,0 +1,71 @@
+<div class="form-horizontal">
+    <h3>Create a new TemperaturesArchive</h3>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-sm-2">
+            <a id="Create" name="Create" class="btn btn-primary" href="#/TemperaturesArchives/new"><span class="glyphicon glyphicon-plus-sign"></span> Create</a>
+        </div>
+    </div>
+</div>
+<hr/>
+<div>
+    <h3>Search for TemperaturesArchives</h3>
+    <form id="TemperaturesArchiveSearch" class="form-horizontal">
+        
+
+    <div class="form-group">
+        <label for="temperature" class="col-sm-2 control-label">Temperature</label>
+        <div class="col-sm-10">
+            <input id="temperature" name="temperature" class="form-control" type="text" ng-model="search.temperature" placeholder="Enter the TemperaturesArchive Temperature"></input>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="sensor" class="col-sm-2 control-label">Sensor</label>
+        <div class="col-sm-10">
+            <select id="sensor" name="sensor" class="form-control" ng-model="search.sensor" ng-options="s as s.address for s in sensorList">
+                <option value="">Choose a Sensor</option>
+            </select>
+        </div>
+    </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-sm-10">
+                <a id="Search" name="Search" class="btn btn-primary" ng-click="performSearch()"><span class="glyphicon glyphicon-search"></span> Search</a>
+            </div>
+        </div>
+    </form>
+</div>
+<div id="search-results">
+        <div class="table-responsive">
+        <table class="table table-responsive table-bordered table-striped clearfix">
+            <thead>
+                <tr>
+                    <th>Temp Timestamp</th>
+                    <th>Temperature</th>
+                    <th>Sensor</th>
+                </tr>
+            </thead>
+            <tbody id="search-results-body">
+                <tr ng-repeat="result in filteredResults | startFrom:currentPage*pageSize | limitTo:pageSize">
+                    <td><a href="#/TemperaturesArchives/edit/{{result.temperatureId}}">{{result.tempTimestamp| date:'yyyy-MM-dd HH:mm:ss Z'}}</a></td>
+                    <td><a href="#/TemperaturesArchives/edit/{{result.temperatureId}}">{{result.temperature}}</a></td>
+                        <td><a href="#/TemperaturesArchives/edit/{{result.temperatureId}}">{{result.sensor.address}}</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+        <ul class="pagination pagination-centered">
+        <li ng-class="{disabled:currentPage == 0}">
+            <a id="prev" href ng-click="previous()">«</a>
+        </li>
+        <li ng-repeat="n in pageRange" ng-class="{active:currentPage == n}" ng-click="setPage(n)">
+            <a href ng-bind="n + 1">1</a>
+        </li>
+        <li ng-class="{disabled: currentPage == (numberOfPages() - 1)}">
+            <a id="next" href ng-click="next()">»</a>
+        </li>
+    </ul>
+
+</div>
