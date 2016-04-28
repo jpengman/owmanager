@@ -10,7 +10,14 @@
             <input id="address" name="address" type="text" class="form-control" ng-model="sensor.address" placeholder="Enter the Sensor Address"></input>
         </div>
     </div>
-
+	
+	<div class="form-group" ng-class="{'has-error': SensorForm.name.$invalid}">
+        <label for="name" class="col-sm-2 control-label">Name</label>
+        <div id="nameControls" class="col-sm-10">
+            <input id="name" name="name" type="text" class="form-control" ng-model="sensor.name" placeholder="Enter the Sensor Name"></input>
+        </div>
+    </div>
+    
     <div class="form-group" ng-class="{'has-error': SensorForm.description.$invalid}">
         <label for="description" class="col-sm-2 control-label">Description</label>
         <div id="descriptionControls" class="col-sm-10">
@@ -18,28 +25,21 @@
         </div>
     </div>
 
-    <div class="form-group" ng-class="{'has-error': SensorForm.lastLogged.$invalid}">
+    <!-- div class="form-group" ng-class="{'has-error': SensorForm.lastLogged.$invalid}">
         <label for="lastLogged" class="col-sm-2 control-label">Last Logged</label>
         <div id="lastLoggedControls" class="col-sm-10">
             <datetime id="lastLogged" name="lastLogged" ng-model="sensor.lastLogged" placeholder="Enter the Sensor Last Logged"></datetime>
             <span class="help-block error" ng-show="SensorForm.lastLogged.$error.datetimeFormat">does not match format "yyyy-MM-dd hh:mm:ss" (e.g. 2013-12-01 22:00:00)</span>
         </div>
-    </div>
+    </div-->
 
-    <div class="form-group" ng-class="{'has-error': SensorForm.lastLoggedTemp.$invalid}">
+    <!-- div class="form-group" ng-class="{'has-error': SensorForm.lastLoggedTemp.$invalid}">
         <label for="lastLoggedTemp" class="col-sm-2 control-label">Last Logged Temp</label>
         <div id="lastLoggedTempControls" class="col-sm-10">
             <input id="lastLoggedTemp" name="lastLoggedTemp" type="number" class="form-control" ng-model="sensor.lastLoggedTemp" placeholder="Enter the Sensor Last Logged Temp"></input>
             <span class="help-block error" ng-show="SensorForm.lastLoggedTemp.$error.number">not a number</span>
         </div>
-    </div>
-
-    <div class="form-group" ng-class="{'has-error': SensorForm.name.$invalid}">
-        <label for="name" class="col-sm-2 control-label">Name</label>
-        <div id="nameControls" class="col-sm-10">
-            <input id="name" name="name" type="text" class="form-control" ng-model="sensor.name" placeholder="Enter the Sensor Name"></input>
-        </div>
-    </div>
+    </div-->
 
     <div class="form-group" ng-class="{'has-error': SensorForm.offset.$invalid}">
         <label for="offset" class="col-sm-2 control-label">Offset</label>
