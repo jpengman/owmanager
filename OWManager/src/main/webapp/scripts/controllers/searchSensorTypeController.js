@@ -4,7 +4,7 @@ angular.module('oWManager').controller('SearchSensorTypeController', function($s
 
     $scope.search={};
     $scope.currentPage = 0;
-    $scope.pageSize= 10;
+    $scope.pageSize= 15;
     $scope.searchResults = [];
     $scope.filteredResults = [];
     $scope.pageRange = [];

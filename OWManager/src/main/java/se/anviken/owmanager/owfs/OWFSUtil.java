@@ -46,7 +46,7 @@ public class OWFSUtil {
 		}
 	}
 
-	public static List<String> getAllSensorNames() throws IOException, JSONException {
+	public static List<String> getAllSensorAdresses() throws IOException, JSONException {
 		JSONObject json = readJsonForSensors();
 		Iterator<String> keys = json.keys();
 		List<String> sensors = new ArrayList<String>();
