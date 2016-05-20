@@ -6,8 +6,9 @@
     
     <div class="form-group" ng-class="{'has-error': SensorForm.address.$invalid}">
         <label for="address" class="col-sm-2 control-label">Address</label>
-        <div id="addressControls" class="col-sm-10">
-            <input id="address" name="address" type="text" class="form-control" ng-model="sensor.address" placeholder="Enter the Sensor Address"></input>
+        <div id="addressControls" class="col-sm-10" ng-switch on="$location.path().indexOf('/Sensors/new') > -1">
+            <input ng-switch-when="true" id="address" name="address" type="text" class="form-control" ng-model="sensor.address" placeholder="Enter the Sensor Address"></input>
+           <input ng-switch-when="false" id="address" name="address" type="text" class="form-control" ng-model="sensor.address" disabled="true"></input>
         </div>
     </div>
 	
