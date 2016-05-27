@@ -29,26 +29,19 @@ angular
 									});
 
 					// NotAssigned
-					$scope.selectedNotAssigned= null;
-					$scope.notAssignedSensors = [];
-					$http.get(
-							'http://localhost:8080/OWManager/rest/notassigned')
-							.then(function successCallback(response) {
-								$scope.notAssignedSensors = response.data;
+					$scope.addressSelectionList = [];
+					$http.get('/OWManager/rest/notassigned').then(
+							function successCallback(response) {
+								$scope.addressSelectionList = response.data;
 							}, function errorCallback(response) {
-								$scope.notAssignedSensors = response.data;
+								$scope.addressSelectionList = null;
 							});
-					$scope
-					.$watch(
-							"selectedNotAssigned",
-							function(selection) {
-								if (typeof selection != 'undefined' && selection !=null) {
-									$scope.sensor.address = selection.value;
-								}
-							});
+					$scope.$watch("addressSelection", function(selection) {
+						if (typeof selection != 'undefined') {
+							$scope.sensor.address = selection;
+						}
+					});
 
-					
-					
 					$scope.save = function() {
 						var successCallback = function(data, responseHeaders) {
 							var id = locationParser(responseHeaders);

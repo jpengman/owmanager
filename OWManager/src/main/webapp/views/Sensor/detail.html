@@ -1,74 +1,74 @@
-<header ng-switch on="$location.path().indexOf('/Sensors/new') > -1">
-	<h3 ng-switch-when="true">Create a new Sensor</h3>
-	<h3 ng-switch-when="false">View or edit Sensor</h3>
+<header data-ng-switch="$location.path().indexOf('/Sensors/new') > -1">
+	<h3 data-ng-switch-when="true">Create a new Sensor</h3>
+	<h3 data-ng-switch-when="false">View or edit Sensor</h3>
 </header>
 <form id="SensorForm" name="SensorForm" class="form-horizontal"
 	role="form">
 	<div class="form-group"
-		ng-class="{'has-error': SensorForm.address.$invalid}">
+		data-ng-class="{'has-error': SensorForm.address.$invalid}">
 		<label for="address" class="col-sm-2 control-label">Address</label>
-		<div id="addressControls" class="col-sm-10" ng-switch
-			on="$location.path().indexOf('/Sensors/new') > -1">
-			<select ng-switch-when="true" id="address" name="address" class="form-control"
-				ng-model="selectedNotAssigned"
-				ng-options="item.Id as item for item in notAssignedSensors">
+		<div id="addressControls" class="col-sm-10"><!-- data-ng-switch="$location.path().indexOf('/Sensors/new') > -1" --> 
+			<select id="address" name="address" class="form-control"
+				data-ng-model="addressSelection"
+				data-ng-options="s for s in addressSelectionList">
 				<option value="">Select unassigned sensor</option>
 			</select>
+			<!--  input data-ng-switch-when="false" id="adress" disabled name="adress" type="text" class="form-control"
+				data-ng-model="sensor.address"></input-->
 		</div>
-
 	</div>
 
 	<div class="form-group"
-		ng-class="{'has-error': SensorForm.name.$invalid}">
+		data-ng-class="{'has-error': SensorForm.name.$invalid}">
 		<label for="name" class="col-sm-2 control-label">Name</label>
 		<div id="nameControls" class="col-sm-10">
 			<input id="name" name="name" type="text" class="form-control"
-				ng-model="sensor.name" placeholder="Enter the Sensor Name"></input>
+				data-ng-model="sensor.name" placeholder="Enter the Sensor Name"></input>
 		</div>
 	</div>
 
 	<div class="form-group"
-		ng-class="{'has-error': SensorForm.description.$invalid}">
+		data-ng-class="{'has-error': SensorForm.description.$invalid}">
 		<label for="description" class="col-sm-2 control-label">Description</label>
 		<div id="descriptionControls" class="col-sm-10">
 			<input id="description" name="description" type="text"
-				class="form-control" ng-model="sensor.description"
+				class="form-control" data-ng-model="sensor.description"
 				placeholder="Enter the Sensor Description"></input>
 		</div>
 	</div>
 
 	<div class="form-group"
-		ng-class="{'has-error': SensorForm.offset.$invalid}">
+		data-ng-class="{'has-error': SensorForm.offset.$invalid}">
 		<label for="offset" class="col-sm-2 control-label">Offset</label>
 		<div id="offsetControls" class="col-sm-10">
 			<input id="offset" name="offset" type="number" class="form-control"
-				ng-model="sensor.offset" placeholder="Enter the Sensor Offset"></input>
+				data-ng-model="sensor.offset" placeholder="Enter the Sensor Offset"></input>
 			<span class="help-block error"
-				ng-show="SensorForm.offset.$error.number">not a number</span>
+				data-ng-show="SensorForm.offset.$error.number">not a number</span>
 		</div>
 	</div>
 
 	<div class="form-group"
-		ng-class="{'has-error': SensorForm.resetInterval.$invalid}">
+		data-ng-class="{'has-error': SensorForm.resetInterval.$invalid}">
 		<label for="resetInterval" class="col-sm-2 control-label">Reset
 			Interval</label>
 		<div id="resetIntervalControls" class="col-sm-10">
 			<input id="resetInterval" name="resetInterval" type="number"
-				class="form-control" ng-model="sensor.resetInterval"
+				class="form-control" data-ng-model="sensor.resetInterval"
 				placeholder="Enter the Sensor Reset Interval"></input> <span
 				class="help-block error"
-				ng-show="SensorForm.resetInterval.$error.number">not a number</span>
+				data-ng-show="SensorForm.resetInterval.$error.number">not a number</span>
 		</div>
 	</div>
 
 	<div class="form-group"
-		ng-class="{'has-error': SensorForm.sensorType.$invalid}">
+		data-ng-class="{'has-error': SensorForm.sensorType.$invalid}">
 		<label for="sensorType" class="col-sm-2 control-label">Sensor
 			Type</label>
 		<div id="sensorTypeControls" class="col-sm-10">
 			<select id="sensorType" name="sensorType" class="form-control"
-				ng-model="sensorTypeSelection"
-				ng-options="s.text for s in sensorTypeSelectionList">
+				data-ng-model="sensorTypeSelection"
+				data-ng-options="s.text for s in sensorTypeSelectionList">
 				<option value="">Choose a Sensor Type</option>
 			</select>
 		</div>
@@ -78,15 +78,15 @@
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-sm-10">
 			<button id="saveSensor" name="saveSensor" class="btn btn-primary"
-				ng-disabled="isClean() || SensorForm.$invalid" ng-click="save()">
+				data-ng-disabled="isClean() || SensorForm.$invalid" data-ng-click="save()">
 				<span class="glyphicon glyphicon-ok-sign"></span> Save
 			</button>
 			<button id="cancel" name="cancel" class="btn btn-default"
-				ng-click="cancel()">
+				data-ng-click="cancel()">
 				<span class="glyphicon glyphicon-remove-sign"></span> Cancel
 			</button>
 			<button id="deleteSensor" name="deleteSensor" class="btn btn-danger"
-				ng-show="sensor.sensorId" ng-click="remove()">
+				data-ng-show="sensor.sensorId" data-ng-click="remove()">
 				<span class="glyphicon glyphicon-trash"></span> Delete
 			</button>
 		</div>
