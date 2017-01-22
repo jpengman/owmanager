@@ -15,7 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class OWFSUtil {
-	private static final String BASE_OWHTTPD_URL = "http://localhost:2121/text";
+	private static final String BASE_OWHTTPD_URL = "http://raspberrypi:2121/json";
 
 	private static String readAll(Reader rd) throws IOException {
 		StringBuilder sb = new StringBuilder();
@@ -62,6 +62,8 @@ public class OWFSUtil {
 	public static void main(String[] args) throws IOException, JSONException {
 		OWSensor sensor = new OWSensor("28.5E2F3E040000");
 		System.out.println(sensor.toString());
+		List<String> test = getAllSensorAdresses();
+		test.clear();
 		
 	}
 }

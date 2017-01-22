@@ -20,6 +20,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
+
+import se.anviken.owmanager.dto.TemperatureDTO;
 import se.anviken.owmanager.model.Sensor;
 
 /**
@@ -71,6 +73,27 @@ public class SensorEndpoint {
 			return Response.status(Status.NOT_FOUND).build();
 		}
 		return Response.ok(entity).build();
+	}
+	@GET
+	@Path("/temperature/{id:[0-9][0-9]*}")
+	@Produces("application/json")
+	public Response getTemperatureById(@PathParam("id") int id) {
+		TypedQuery<Sensor> findByIdQuery = em
+				.createQuery(
+						"SELECT DISTINCT s FROM Sensor s LEFT JOIN FETCH s.sensorType WHERE s.sensorId = :entityId ORDER BY s.sensorId",
+						Sensor.class);
+		findByIdQuery.setParameter("entityId", id);
+		Sensor entity;
+		try {
+			entity = findByIdQuery.getSingleResult();
+		} catch (NoResultException nre) {
+			entity = null;
+		}
+		if (entity == null) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		float temperature = entity.getLastLoggedTemp() + entity.getOffset();  
+		return Response.ok(new TemperatureDTO(entity.getLastLogged(),temperature)).build();
 	}
 
 	@GET
