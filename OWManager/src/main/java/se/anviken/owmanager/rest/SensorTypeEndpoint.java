@@ -1,5 +1,6 @@
 package se.anviken.owmanager.rest;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -20,6 +21,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
+
+import se.anviken.owmanager.dto.TemperatureDTO;
+import se.anviken.owmanager.model.Sensor;
 import se.anviken.owmanager.model.SensorType;
 
 /**
@@ -72,6 +76,31 @@ public class SensorTypeEndpoint {
 			return Response.status(Status.NOT_FOUND).build();
 		}
 		return Response.ok(entity).build();
+	}
+	@GET
+	@Path("/average/{id:[0-9][0-9]*}")
+	@Produces("application/json")
+	public Response findAverageById(@PathParam("id") int id) {
+		TypedQuery<Sensor> findtempQuery = em
+				.createQuery(
+						"SELECT s FROM Sensor s LEFT JOIN FETCH s.sensorType WHERE s.sensorType.sensorTypeId = :entityId ORDER BY s.sensorId",
+						Sensor.class);
+		findtempQuery.setParameter("entityId", id);
+		float temperature = 0;
+		Date lastLogged=null; 
+		try {
+			List<Sensor> entityList = findtempQuery.getResultList();
+			for (Sensor sensor:entityList){
+				temperature = temperature+sensor.getLastLoggedTemp()+sensor.getOffset();
+				if(lastLogged ==null || sensor.getLastLogged().after(lastLogged)){
+					lastLogged = sensor.getLastLogged();
+				}
+			}
+			temperature = temperature/entityList.size();
+		} catch (NoResultException nre) {
+			return Response.status(Status.NOT_FOUND).build();
+		}  
+		return Response.ok(new TemperatureDTO(lastLogged,temperature)).build();
 	}
 
 	@GET
