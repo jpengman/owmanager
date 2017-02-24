@@ -169,9 +169,8 @@ public class SensorEndpoint {
 				e.printStackTrace();
 			}
 		}
-
-		return Response.ok(JsonRenderer.renderDataTable(data, true, false, true), MediaType.APPLICATION_JSON).build();
-
+		return Response.ok(JsonRenderer.renderDataTable(data, true, false, true).toString(), MediaType.APPLICATION_JSON)
+				.build();
 	}
 
 	@GET

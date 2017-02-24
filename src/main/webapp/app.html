@@ -21,7 +21,6 @@
                       <span class="icon-bar"></span>
                     </button>
 				    <a class="navbar-brand" href="#">OWManager</a>
-				    <a class="navbar-brand" href="../EngineHeaterTimer">EngineHeaterTimer</a>
 			    </div>
 			</div>
     	</div>
@@ -39,6 +38,11 @@
                         	<a class="list-group-item" ng-class="{active: matchesRoute('SensorTypes')}" href="#/SensorTypes" data-toggle="offcanvas">SensorTypes</a>
                         	<!-- a class="list-group-item" ng-class="{active: matchesRoute('Temperatures')}" href="#/Temperatures" data-toggle="offcanvas">Temperatures</a-->
                         	<!-- a class="list-group-item" ng-class="{active: matchesRoute('TemperaturesArchives')}" href="#/TemperaturesArchives" data-toggle="offcanvas">TemperaturesArchives</a-->
+                        </div>
+                    </nav>
+                     <nav class="sidebar-nav" ng-controller="NavController" role="navigation">
+                        <div id="sidebar-links" class="list-group">
+                      		<a class="list-group-item" href="../EngineHeaterTimer" data-toggle="offcanvas">Engine Heater Timer</a>
                         </div>
                     </nav>
                 </div>

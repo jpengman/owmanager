@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <title>Utetemperatur</title>
+	<!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="scripts/vendor/jquery-2.1.1.js"></script>
+    <script type="text/javascript">
+
+    google.load('visualization', '1', {'packages':['corechart']});
+    google.setOnLoadCallback(drawChart);
+
+    var timerId = setInterval(drawChart, 60000);
+    function drawChart() {
+			var url = "rest/sensors/getdatatable/14/1";
+			var jsonData = $.ajax({
+      	 	 	url: url,
+     	   		dataType:"json",
+    	    	async: false
+          		}).responseText;
+    		var data = new google.visualization.DataTable(jsonData);
+    		var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+      		chart.draw(data, {height:600});
+    }
+    function reload(){
+				drawChart();
+	}
+    </script>
+  </head>
+  <body>
+  <div width="100%" height="600" id="chart_div"></div>
+  </body>
+</html>
+
