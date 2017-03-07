@@ -51,23 +51,21 @@ public class DataEndpoint {
 	@Path("/")
 	@Produces("application/json")
 	public String getAPIDoc() {
-		String returnString = "getdatatable API: /getdatatable/{ids}/{noofminutes:[0-9][0-9]*}\n"
+		String returnString = "getdatatable API: /getdatatable/{ids}/{noofminutes}\n"
 				+ "ids = Sensor ID:s comma separated\n" + "noofminutes = Size of dataset in minutes (Default:"
 				+ DataEndpoint.DEFAULT_NO_OF_MINUTES + ")\n\n"
 
-				+ "getpeaks API: /getpeaks/{id:[0-9][0-9]*}/{noofminutes:[0-9][0-9]*}/{range:[0-9][0-9]*}/{minpeakvalue:[0-9][0-9]*}\n"
-				+ "id = Sensor ID\n" + "noofminutes = Size of dataset in minutes (Default:"
-				+ DataEndpoint.DEFAULT_NO_OF_MINUTES + ")\n" + "range = The range of the peak (Default:"
-				+ DataUtil.DEFAULT_PEAK_RANGE + ")\n" + "minpeakvalue = Minimun value of peak (Default:"
-				+ DataUtil.DEFAULT_MIN_PEAK_VALUE + ")\n\n"
+				+ "getpeaks API: /getpeaks/{id:[0-9][0-9]*}/{noofminutes}/{range}/{minpeakvalue}\n" + "id = Sensor ID\n"
+				+ "noofminutes = Size of dataset in minutes (Default:" + DataEndpoint.DEFAULT_NO_OF_MINUTES + ")\n"
+				+ "range = The range of the peak (Default:" + DataUtil.DEFAULT_PEAK_RANGE + ")\n"
+				+ "minpeakvalue = Minimun value of peak (Default:" + DataUtil.DEFAULT_MIN_PEAK_VALUE + ")\n\n"
 
-				+ "getnoofpeaks API: /getnoofpeaks/{id:[0-9][0-9]*}/{noofminutes:[0-9][0-9]*}/{range:[0-9][0-9]*}/{minpeakvalue:[0-9][0-9]*}\n"
-				+ "id = Sensor ID\n" + "noofminutes = Size of dataset in minutes (Default:"
-				+ DataEndpoint.DEFAULT_NO_OF_MINUTES + ")\n" + "range = The range of the peak (Default:"
-				+ DataUtil.DEFAULT_PEAK_RANGE + ")\n" + "minpeakvalue = Minimun value of peak (Default:"
-				+ DataUtil.DEFAULT_MIN_PEAK_VALUE + ")\n\n"
+				+ "getnoofpeaks API: /getnoofpeaks/{id}/{noofminutes}/{range}/{minpeakvalue}\n" + "id = Sensor ID\n"
+				+ "noofminutes = Size of dataset in minutes (Default:" + DataEndpoint.DEFAULT_NO_OF_MINUTES + ")\n"
+				+ "range = The range of the peak (Default:" + DataUtil.DEFAULT_PEAK_RANGE + ")\n"
+				+ "minpeakvalue = Minimun value of peak (Default:" + DataUtil.DEFAULT_MIN_PEAK_VALUE + ")\n\n"
 
-				+ "temperature API: /temperature/{id:[0-9][0-9]*}\n" + "id = Sensor ID\n\n";
+				+ "temperature API: /temperature/{id}\n" + "id = Sensor ID\n\n";
 
 		return returnString;
 	}
