@@ -15,6 +15,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -102,9 +103,9 @@ public class DataEndpoint {
 		final List<Sensor> results = query.getResultList();
 		DataTable data = new DataTable();
 		ArrayList<ColumnDescription> cd = new ArrayList<ColumnDescription>();
-		cd.add(new ColumnDescription("Tid1", ValueType.TEXT, "Tid2"));
+		cd.add(new ColumnDescription("Tid", ValueType.TEXT, "Tid"));
 		for (Sensor sensor : results) {
-			cd.add(new ColumnDescription(sensor.getName(), ValueType.NUMBER, sensor.getDescription()));
+			cd.add(new ColumnDescription(sensor.getName(), ValueType.NUMBER, sensor.getName()));
 		}
 		data.addColumns(cd);
 		List<Map<Date, Float>> temperatureLists = new ArrayList<Map<Date, Float>>();
@@ -148,6 +149,54 @@ public class DataEndpoint {
 	@Produces("application/json")
 	public Response getDataTableByIdAndTime(@PathParam("ids") String ids, @PathParam("noofminutes") int noofminutes) {
 		return getDatatable(ids, noofminutes);
+	}
+
+	@GET
+	@Path("/getminavgmax/{type}/{id:[0-9][0-9]*}")
+	@Produces("application/json")
+	public Response getMinAvgMaxDataTableById(@PathParam("id") int id, @PathParam("type") String type) {
+
+		String queryString = getMinAvgMaxQueryString(type, id);
+
+		Query query = em.createNativeQuery(queryString);
+
+		@SuppressWarnings("unchecked")
+		List<Object[]> resultList = query.getResultList();
+
+		DataTable data = new DataTable();
+		ArrayList<ColumnDescription> cd = new ArrayList<ColumnDescription>();
+		cd.add(new ColumnDescription("Tid", ValueType.TEXT, "Tid"));
+		cd.add(new ColumnDescription("Min", ValueType.NUMBER, "Min"));
+		cd.add(new ColumnDescription("Avg", ValueType.NUMBER, "Avg"));
+		cd.add(new ColumnDescription("Max", ValueType.NUMBER, "Max"));
+		data.addColumns(cd);
+		for (Object[] record : resultList) {
+			TableRow row = new TableRow();
+			row.addCell(formatTimeSting(record, type));
+			row.addCell(Double.parseDouble(record[0].toString()));
+			row.addCell(Double.parseDouble(record[1].toString()));
+			row.addCell(Double.parseDouble(record[2].toString()));
+			try {
+				data.addRow(row);
+			} catch (TypeMismatchException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return Response.ok(JsonRenderer.renderDataTable(data, true, false, true).toString(), MediaType.APPLICATION_JSON)
+				.build();
+	}
+
+	private String formatTimeSting(Object[] record, String type) {
+		return record[3] + "-" + record[4] + "-" + record[5];
+	}
+
+	private String getMinAvgMaxQueryString(String type, int id) {
+		String baseSelect = "SELECT ROUND(MIN(ta.temperature),1),ROUND(AVG(ta.temperature),1),ROUND(MAX(ta.temperature),1),";
+		String typeSelect = "YEAR(ta.temp_timestamp),MONTH(ta.temp_timestamp),DAY(ta.temp_timestamp)";
+		String fromString = "FROM temperatures_archive ta " + "WHERE ta.sensor_id = " + id + " ";
+		String groupBy = "GROUP BY " + typeSelect;
+		return baseSelect + typeSelect + fromString + groupBy;
 	}
 
 	@GET
