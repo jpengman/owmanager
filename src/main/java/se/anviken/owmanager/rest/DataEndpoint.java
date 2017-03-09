@@ -23,7 +23,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import com.google.visualization.datasource.base.TypeMismatchException;
 import com.google.visualization.datasource.datatable.ColumnDescription;
@@ -55,6 +54,9 @@ public class DataEndpoint {
 		String returnString = "getdatatable API: /getdatatable/{ids}/{noofminutes}\n"
 				+ "ids = Sensor ID:s comma separated\n" + "noofminutes = Size of dataset in minutes (Default:"
 				+ DataEndpoint.DEFAULT_NO_OF_MINUTES + ")\n\n"
+
+				+ "getminavgmax API: getminavgmax/{type}/{id}\n"
+				+ "type = Type of graph, allowed values:day,week,month,year\n" + "id = Sensor ID\n"
 
 				+ "getpeaks API: /getpeaks/{id:[0-9][0-9]*}/{noofminutes}/{range}/{minpeakvalue}\n" + "id = Sensor ID\n"
 				+ "noofminutes = Size of dataset in minutes (Default:" + DataEndpoint.DEFAULT_NO_OF_MINUTES + ")\n"
@@ -156,44 +158,63 @@ public class DataEndpoint {
 	@Produces("application/json")
 	public Response getMinAvgMaxDataTableById(@PathParam("id") int id, @PathParam("type") String type) {
 
-		String queryString = getMinAvgMaxQueryString(type, id);
+		if (type.equalsIgnoreCase("day") || type.equalsIgnoreCase("week") || type.equalsIgnoreCase("month")
+				|| type.equalsIgnoreCase("year")) {
+			String queryString = getMinAvgMaxQueryString(type, id);
 
-		Query query = em.createNativeQuery(queryString);
+			Query query = em.createNativeQuery(queryString);
 
-		@SuppressWarnings("unchecked")
-		List<Object[]> resultList = query.getResultList();
+			@SuppressWarnings("unchecked")
+			List<Object[]> resultList = query.getResultList();
 
-		DataTable data = new DataTable();
-		ArrayList<ColumnDescription> cd = new ArrayList<ColumnDescription>();
-		cd.add(new ColumnDescription("Tid", ValueType.TEXT, "Tid"));
-		cd.add(new ColumnDescription("Min", ValueType.NUMBER, "Min"));
-		cd.add(new ColumnDescription("Avg", ValueType.NUMBER, "Avg"));
-		cd.add(new ColumnDescription("Max", ValueType.NUMBER, "Max"));
-		data.addColumns(cd);
-		for (Object[] record : resultList) {
-			TableRow row = new TableRow();
-			row.addCell(formatTimeSting(record, type));
-			row.addCell(Double.parseDouble(record[0].toString()));
-			row.addCell(Double.parseDouble(record[1].toString()));
-			row.addCell(Double.parseDouble(record[2].toString()));
-			try {
-				data.addRow(row);
-			} catch (TypeMismatchException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			DataTable data = new DataTable();
+			ArrayList<ColumnDescription> cd = new ArrayList<ColumnDescription>();
+			cd.add(new ColumnDescription("Tid", ValueType.TEXT, "Tid"));
+			cd.add(new ColumnDescription("Min", ValueType.NUMBER, "Min"));
+			cd.add(new ColumnDescription("Avg", ValueType.NUMBER, "Avg"));
+			cd.add(new ColumnDescription("Max", ValueType.NUMBER, "Max"));
+			data.addColumns(cd);
+			for (Object[] record : resultList) {
+				TableRow row = new TableRow();
+				row.addCell(formatTimeSting(record, type));
+				row.addCell(Double.parseDouble(record[0].toString()));
+				row.addCell(Double.parseDouble(record[1].toString()));
+				row.addCell(Double.parseDouble(record[2].toString()));
+				try {
+					data.addRow(row);
+				} catch (TypeMismatchException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
+			return Response
+					.ok(JsonRenderer.renderDataTable(data, true, false, true).toString(), MediaType.APPLICATION_JSON)
+					.build();
+		} else {
+			return Response.noContent().build();
 		}
-		return Response.ok(JsonRenderer.renderDataTable(data, true, false, true).toString(), MediaType.APPLICATION_JSON)
-				.build();
 	}
 
 	private String formatTimeSting(Object[] record, String type) {
-		return record[3] + "-" + record[4] + "-" + record[5];
+		if (type.equalsIgnoreCase("day")) {
+			return record[3] + "-" + record[4] + "-" + record[5];
+		} else if (type.equalsIgnoreCase("year")) {
+			return record[3].toString();
+		} else {
+			return record[3] + "-" + record[4];
+		}
 	}
 
 	private String getMinAvgMaxQueryString(String type, int id) {
 		String baseSelect = "SELECT ROUND(MIN(ta.temperature),1),ROUND(AVG(ta.temperature),1),ROUND(MAX(ta.temperature),1),";
-		String typeSelect = "YEAR(ta.temp_timestamp),MONTH(ta.temp_timestamp),DAY(ta.temp_timestamp)";
+		String typeSelect = "YEAR(ta.temp_timestamp)";
+		if (type.equalsIgnoreCase("day")) {
+			typeSelect += ",MONTH(ta.temp_timestamp),DAY(ta.temp_timestamp)";
+		} else if (type.equalsIgnoreCase("week")) {
+			typeSelect += ",WEEK(ta.temp_timestamp)";
+		} else if (type.equalsIgnoreCase("month")) {
+			typeSelect += ",MONTH(ta.temp_timestamp)";
+		}
 		String fromString = "FROM temperatures_archive ta " + "WHERE ta.sensor_id = " + id + " ";
 		String groupBy = "GROUP BY " + typeSelect;
 		return baseSelect + typeSelect + fromString + groupBy;
@@ -260,7 +281,7 @@ public class DataEndpoint {
 		return DataUtil.FindPeaksInDataset(getDataSet(id, noofminutes), range, minpeakvalue).size();
 	}
 
-	private Response getTemperature(int id) {
+	private TemperatureDTO getTemperature(int id) {
 		TypedQuery<Sensor> findByIdQuery = em.createQuery(
 				"SELECT DISTINCT s FROM Sensor s LEFT JOIN FETCH s.sensorType WHERE s.sensorId = :entityId ORDER BY s.sensorId",
 				Sensor.class);
@@ -272,16 +293,18 @@ public class DataEndpoint {
 			entity = null;
 		}
 		if (entity == null) {
-			return Response.status(Status.NOT_FOUND).build();
+			return null;
 		}
 		float temperature = entity.getLastLoggedTemp() + entity.getOffset();
-		return Response.ok(new TemperatureDTO(entity.getLastLogged(), temperature)).build();
+		return new TemperatureDTO(entity.getLastLogged(), temperature);
 	}
 
 	@GET
 	@Path("/temperature/{id:[0-9][0-9]*}")
 	@Produces("application/json")
 	public Response getTemperatureById(@PathParam("id") int id) {
-		return getTemperature(id);
+		return Response.ok(getTemperature(id)).build();
+
 	}
+
 }
