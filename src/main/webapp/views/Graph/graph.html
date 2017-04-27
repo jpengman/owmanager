@@ -1,0 +1,24 @@
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+
+    google.load('visualization', '1', {'packages':['corechart']});
+    google.setOnLoadCallback(drawChart);
+
+    var timerId = setInterval(drawChart, 60000);
+    function drawChart() {
+			var url = document.getElementById('url').value;
+			var jsonData = $.ajax({
+      	 	 	url: url,
+     	   		dataType:"json",
+    	    	async: false
+          		}).responseText;
+    		var data = new google.visualization.DataTable(jsonData);
+    		var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+      		chart.draw(data, {height:600});
+    }
+    function reload(){
+				drawChart();
+	}
+    </script>
+  <input id="url" type="text" value=".rest/data/getdatatable/14/1440"></input>
+  <button onclick="drawChart()" type="button">draw graph</button>

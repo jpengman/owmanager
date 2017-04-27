@@ -8,6 +8,8 @@
     <class>se.anviken.owmanager.model.Sensor</class>
     <class>se.anviken.owmanager.model.Temperature</class>
     <class>se.anviken.owmanager.model.TemperaturesArchive</class>
+    <class>se.anviken.owmanager.model.MeterType</class>
+    <class>se.anviken.owmanager.model.Meter</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
    <properties>
         <!-- Properties for Hibernate -->

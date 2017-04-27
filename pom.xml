@@ -76,6 +76,11 @@
     	<artifactId>visualization-datasource</artifactId>
     	<version>1.1.1</version>
     </dependency>
+    <dependency>
+    <groupId>org.jfree</groupId>
+    <artifactId>jfreesvg</artifactId>
+    <version>3.2</version>
+</dependency>
     
   </dependencies>
   <build>
