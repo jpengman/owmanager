@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="oWManager">
+<html lang="en" data-ng-app="oWManager">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,16 +32,16 @@
                     <a href="app.html">
                         <img class="hidden-xs img-responsive" src="img/dallas-semiconductor.png" alt="JBoss Forge"></img>
                     </a>
-                    <nav class="sidebar-nav" ng-controller="NavController" role="navigation">
+                    <nav class="sidebar-nav" data-ng-controller="NavController" role="navigation">
                         <div id="sidebar-entries" class="list-group">
-                        	<a class="list-group-item" ng-class="{active: matchesRoute('Sensors')}" href="#/Sensors" data-toggle="offcanvas">Sensors</a>
-                        	<a class="list-group-item" ng-class="{active: matchesRoute('SensorTypes')}" href="#/SensorTypes" data-toggle="offcanvas">SensorTypes</a>
-                        	<a class="list-group-item" ng-class="{active: matchesRoute('Graphs')}" href="#/Graphs" data-toggle="offcanvas">Graphs</a>
+                        	<a class="list-group-item" data-ng-class="{active: matchesRoute('Sensors')}" href="#/Sensors" data-toggle="offcanvas">Sensors</a>
+                        	<a class="list-group-item" data-ng-class="{active: matchesRoute('SensorTypes')}" href="#/SensorTypes" data-toggle="offcanvas">SensorTypes</a>
+                        	<a class="list-group-item" data-ng-class="{active: matchesRoute('Graphs')}" href="#/Graphs" data-toggle="offcanvas">Graphs</a>
                         	<!-- a class="list-group-item" ng-class="{active: matchesRoute('Temperatures')}" href="#/Temperatures" data-toggle="offcanvas">Temperatures</a-->
                         	<!-- a class="list-group-item" ng-class="{active: matchesRoute('TemperaturesArchives')}" href="#/TemperaturesArchives" data-toggle="offcanvas">TemperaturesArchives</a-->
                         </div>
                     </nav>
-                     <nav class="sidebar-nav" ng-controller="NavController" role="navigation">
+                     <nav class="sidebar-nav" data-ng-controller="NavController" role="navigation">
                         <div id="sidebar-links" class="list-group">
                       		<a class="list-group-item" href="../EngineHeaterTimer" data-toggle="offcanvas">Engine Heater Timer</a>
                         </div>
@@ -49,11 +49,11 @@
                 </div>
                 <!-- main area-->
                 <div class="col-sm-offset-1 col-xs-12 col-sm-8 well mainarea">
-                    <div ng-controller="FlashController" class="alert alert-dismissible" ng-class="'alert-' + flash.getMessage().cssClass" role="alert" ng-show="showAlert">
-                        <button type="button" class="close" ng-click="hideAlert()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <div data-ng-controller="FlashController" class="alert alert-dismissible" data-ng-class="'alert-' + flash.getMessage().cssClass" role="alert" data-ng-show="showAlert">
+                        <button type="button" class="close" data-ng-click="hideAlert()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         {{flash.getMessage().text}}
                     </div>
-                    <div id="main" ng-view>
+                    <div id="main" data-ng-view>
                     </div>
                 </div>
             </div>

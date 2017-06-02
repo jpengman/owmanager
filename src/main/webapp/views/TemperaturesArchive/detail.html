@@ -1,29 +1,29 @@
-<header ng-switch on="$location.path().indexOf('/TemperaturesArchives/new') > -1">
-    <h3 ng-switch-when="true">Create a new TemperaturesArchive</h3>
-    <h3 ng-switch-when="false">View or edit TemperaturesArchive</h3>
+<header data-ng-switch="$location.path().indexOf('/TemperaturesArchives/new') > -1">
+    <h3 data-ng-switch-when="true">Create a new TemperaturesArchive</h3>
+    <h3 data-ng-switch-when="false">View or edit TemperaturesArchive</h3>
 </header>
 <form id="TemperaturesArchiveForm" name="TemperaturesArchiveForm" class="form-horizontal" role="form">
     
-    <div class="form-group" ng-class="{'has-error': TemperaturesArchiveForm.tempTimestamp.$invalid}">
+    <div class="form-group" data-ng-class="{'has-error': TemperaturesArchiveForm.tempTimestamp.$invalid}">
         <label for="tempTimestamp" class="col-sm-2 control-label">Temp Timestamp</label>
-        <div id="tempTimestampControls" class="col-sm-10">
-            <datetime id="tempTimestamp" name="tempTimestamp" ng-model="temperaturesArchive.tempTimestamp" placeholder="Enter the TemperaturesArchive Temp Timestamp"></datetime>
-            <span class="help-block error" ng-show="TemperaturesArchiveForm.tempTimestamp.$error.datetimeFormat">does not match format "yyyy-MM-dd hh:mm:ss" (e.g. 2013-12-01 22:00:00)</span>
-        </div>
+        <!-- div id="tempTimestampControls" class="col-sm-10">
+            datetime id="tempTimestamp" name="tempTimestamp" data-ng-model="temperaturesArchive.tempTimestamp" placeholder="Enter the TemperaturesArchive Temp Timestamp"></datetime>
+            <span class="help-block error" data-ng-show="TemperaturesArchiveForm.tempTimestamp.$error.datetimeFormat">does not match format "yyyy-MM-dd hh:mm:ss" (e.g. 2013-12-01 22:00:00)</span>
+        </div-->
     </div>
 
-    <div class="form-group" ng-class="{'has-error': TemperaturesArchiveForm.temperature.$invalid}">
+    <div class="form-group" data-ng-class="{'has-error': TemperaturesArchiveForm.temperature.$invalid}">
         <label for="temperature" class="col-sm-2 control-label">Temperature</label>
         <div id="temperatureControls" class="col-sm-10">
-            <input id="temperature" name="temperature" type="number" class="form-control" ng-model="temperaturesArchive.temperature" placeholder="Enter the TemperaturesArchive Temperature"></input>
-            <span class="help-block error" ng-show="TemperaturesArchiveForm.temperature.$error.number">not a number</span>
+            <input id="temperature" name="temperature" type="number" class="form-control" data-ng-model="temperaturesArchive.temperature" placeholder="Enter the TemperaturesArchive Temperature"></input>
+            <span class="help-block error" data-ng-show="TemperaturesArchiveForm.temperature.$error.number">not a number</span>
         </div>
     </div>
 
-    <div class="form-group" ng-class="{'has-error': TemperaturesArchiveForm.sensor.$invalid}">
+    <div class="form-group" data-ng-class="{'has-error': TemperaturesArchiveForm.sensor.$invalid}">
         <label for="sensor" class="col-sm-2 control-label">Sensor</label>
         <div id="sensorControls" class="col-sm-10">
-        <select id="sensor" name="sensor" class="form-control" ng-model="sensorSelection" ng-options="s.text for s in sensorSelectionList"  >
+        <select id="sensor" name="sensor" class="form-control" data-ng-model="sensorSelection" data-ng-options="s.text for s in sensorSelectionList"  >
             <option value="">Choose a Sensor</option>
         </select>
         </div>
@@ -32,9 +32,9 @@
 
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            <button id="saveTemperaturesArchive" name="saveTemperaturesArchive" class="btn btn-primary" ng-disabled="isClean() || TemperaturesArchiveForm.$invalid" ng-click="save()"><span class="glyphicon glyphicon-ok-sign"></span> Save</button>
-            <button id="cancel" name="cancel" class="btn btn-default" ng-click="cancel()"><span class="glyphicon glyphicon-remove-sign"></span> Cancel</button>
-            <button id="deleteTemperaturesArchive" name="deleteTemperaturesArchive" class="btn btn-danger" ng-show="temperaturesArchive.temperatureId" ng-click="remove()"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+            <button id="saveTemperaturesArchive" name="saveTemperaturesArchive" class="btn btn-primary" data-ng-disabled="isClean() || TemperaturesArchiveForm.$invalid" data-ng-click="save()"><span class="glyphicon glyphicon-ok-sign"></span> Save</button>
+            <button id="cancel" name="cancel" class="btn btn-default" data-ng-click="cancel()"><span class="glyphicon glyphicon-remove-sign"></span> Cancel</button>
+            <button id="deleteTemperaturesArchive" name="deleteTemperaturesArchive" class="btn btn-danger" data-ng-show="temperaturesArchive.temperatureId" data-ng-click="remove()"><span class="glyphicon glyphicon-trash"></span> Delete</button>
         </div>
     </div>
 </form>

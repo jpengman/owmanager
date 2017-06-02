@@ -1,29 +1,29 @@
-<header ng-switch on="$location.path().indexOf('/SensorTypes/new') > -1">
-    <h3 ng-switch-when="true">Create a new SensorType</h3>
-    <h3 ng-switch-when="false">View or edit SensorType</h3>
+<header data-ng-switch="$location.path().indexOf('/SensorTypes/new') > -1">
+    <h3 data-ng-switch-when="true">Create a new SensorType</h3>
+    <h3 data-ng-switch-when="false">View or edit SensorType</h3>
 </header>
 <form id="SensorTypeForm" name="SensorTypeForm" class="form-horizontal" role="form">
     
-    <div class="form-group" ng-class="{'has-error': SensorTypeForm.description.$invalid}">
+    <div class="form-group" data-ng-class="{'has-error': SensorTypeForm.description.$invalid}">
         <label for="description" class="col-sm-2 control-label">Description</label>
         <div id="descriptionControls" class="col-sm-10">
-            <input id="description" name="description" type="text" class="form-control" ng-model="sensorType.description" placeholder="Enter the SensorType Description"></input>
+            <input id="description" name="description" type="text" class="form-control" data-ng-model="sensorType.description" placeholder="Enter the SensorType Description"></input>
         </div>
     </div>
 
-    <div class="form-group" ng-class="{'has-error': SensorTypeForm.sensorType.$invalid}">
+    <div class="form-group" data-ng-class="{'has-error': SensorTypeForm.sensorType.$invalid}">
         <label for="sensorType" class="col-sm-2 control-label">Sensor Type</label>
         <div id="sensorTypeControls" class="col-sm-10">
-            <input id="sensorType" name="sensorType" type="text" class="form-control" ng-model="sensorType.sensorType" placeholder="Enter the SensorType Sensor Type"></input>
+            <input id="sensorType" name="sensorType" type="text" class="form-control" data-ng-model="sensorType.sensorType" placeholder="Enter the SensorType Sensor Type"></input>
         </div>
     </div>
 
 
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            <button id="saveSensorType" name="saveSensorType" class="btn btn-primary" ng-disabled="isClean() || SensorTypeForm.$invalid" ng-click="save()"><span class="glyphicon glyphicon-ok-sign"></span> Save</button>
-            <button id="cancel" name="cancel" class="btn btn-default" ng-click="cancel()"><span class="glyphicon glyphicon-remove-sign"></span> Cancel</button>
-            <button id="deleteSensorType" name="deleteSensorType" class="btn btn-danger" ng-show="sensorType.sensorTypeId" ng-click="remove()"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+            <button id="saveSensorType" name="saveSensorType" class="btn btn-primary" data-ng-disabled="isClean() || SensorTypeForm.$invalid" data-ng-click="save()"><span class="glyphicon glyphicon-ok-sign"></span> Save</button>
+            <button id="cancel" name="cancel" class="btn btn-default" data-ng-click="cancel()"><span class="glyphicon glyphicon-remove-sign"></span> Cancel</button>
+            <button id="deleteSensorType" name="deleteSensorType" class="btn btn-danger" data-ng-show="sensorType.sensorTypeId" data-ng-click="remove()"><span class="glyphicon glyphicon-trash"></span> Delete</button>
         </div>
     </div>
 </form>
