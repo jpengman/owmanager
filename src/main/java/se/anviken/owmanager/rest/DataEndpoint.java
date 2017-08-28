@@ -139,6 +139,29 @@ public class DataEndpoint {
 				.build();
 	}
 
+	/*
+	 * private Response getHPDatatable() {
+	 * 
+	 * List<Integer> sensorIDs = Arrays.asList(intarray); TypedQuery<Sensor>
+	 * query =
+	 * em.createQuery("SELECT s FROM Sensor s where s.sensorId IN :sensors",
+	 * Sensor.class); query.setParameter("sensors", sensorIDs); final
+	 * List<Sensor> results = query.getResultList(); DataTable data = new
+	 * DataTable(); ArrayList<ColumnDescription> cd = new
+	 * ArrayList<ColumnDescription>(); cd.add(new ColumnDescription("Tid",
+	 * ValueType.TEXT, "Tid")); cd.add(new ColumnDescription("Antal starter",
+	 * ValueType.NUMBER, "Antal starter")); data.addColumns(cd); List<Map<Date,
+	 * Float>> temperatureLists = new ArrayList<Map<Date, Float>>(); Set<Date>
+	 * timestamps = new HashSet<Date>();
+	 * 
+	 * for (Date timestamp : timestamps) { TableRow row = new TableRow();
+	 * row.addCell(TimeUtil.getTimeOfDay(timestamp));
+	 * row.addCell(temperatureList.get(timestamp)); data.addRow(row);
+	 * 
+	 * } return Response.ok(JsonRenderer.renderDataTable(data, true, false,
+	 * true).toString(), MediaType.APPLICATION_JSON) .build(); }
+	 */
+
 	@GET
 	@Path("/getdatatable/{ids}")
 	@Produces("application/json")
