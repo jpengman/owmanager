@@ -1,105 +1,130 @@
 <!DOCTYPE html>
 <html lang="en" data-ng-app="oWManager">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>OW Manager</title>
-    <link href="styles/bootstrap.css" rel="stylesheet" media="screen">
-    <link href="styles/bootstrap-theme.css" rel="stylesheet" media="screen">
-    <link href="styles/main.css" rel="stylesheet" media="screen">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name=apple-mobile-web-app-status-bar-style content=black>
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="apple-touch-startup-image" href="img/launchscreen.png">
+<title>OW Manager</title>
+<link href="styles/bootstrap.css" rel="stylesheet" media="screen">
+<link href="styles/bootstrap-theme.css" rel="stylesheet" media="screen">
+<link href="styles/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
-    <div id="wrap">
-    	
-    	<div class="navbar navbar-inverse navbar-fixed-top">
+	<div id="wrap">
+
+		<div class="navbar navbar-inverse navbar-fixed-top">
 			<div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="offcanvas">
-                      <span class="sr-only">Toggle navigation</span>
-                      <span class="icon-bar"></span>
-                      <span class="icon-bar"></span>
-                      <span class="icon-bar"></span>
-                    </button>
-				    <a class="navbar-brand" href="#">OWManager</a>
-			    </div>
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="offcanvas">
+						<span class="sr-only">Toggle navigation</span> <span
+							class="icon-bar"></span> <span class="icon-bar"></span> <span
+							class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">OWManager</a>
+				</div>
 			</div>
-    	</div>
-        
-        <div class="container">
-            <div class="row row-offcanvas row-offcanvas-left">
-                <!-- sidebar -->
-                <div class="col-xs-6 col-sm-3 well sidebar-offcanvas">
-                    <a href="app.html">
-                        <img class="hidden-xs img-responsive" src="img/dallas-semiconductor.png" alt="JBoss Forge"></img>
-                    </a>
-                    <nav class="sidebar-nav" data-ng-controller="NavController" role="navigation">
-                        <div id="sidebar-entries" class="list-group">
-                        	<a class="list-group-item" data-ng-class="{active: matchesRoute('Sensors')}" href="#/Sensors" data-toggle="offcanvas">Sensors</a>
-                        	<a class="list-group-item" data-ng-class="{active: matchesRoute('SensorTypes')}" href="#/SensorTypes" data-toggle="offcanvas">SensorTypes</a>
-                        	<a class="list-group-item" data-ng-class="{active: matchesRoute('Graphs')}" href="#/Graphs" data-toggle="offcanvas">Graphs</a>
-                        	<!-- a class="list-group-item" ng-class="{active: matchesRoute('Temperatures')}" href="#/Temperatures" data-toggle="offcanvas">Temperatures</a-->
-                        	<!-- a class="list-group-item" ng-class="{active: matchesRoute('TemperaturesArchives')}" href="#/TemperaturesArchives" data-toggle="offcanvas">TemperaturesArchives</a-->
-                        </div>
-                    </nav>
-                     <nav class="sidebar-nav" data-ng-controller="NavController" role="navigation">
-                        <div id="sidebar-links" class="list-group">
-                      		<a class="list-group-item" href="../EngineHeaterTimer" data-toggle="offcanvas">Engine Heater Timer</a>
-                        </div>
-                    </nav>
-                </div>
-                <!-- main area-->
-                <div class="col-sm-offset-1 col-xs-12 col-sm-8 well mainarea">
-                    <div data-ng-controller="FlashController" class="alert alert-dismissible" data-ng-class="'alert-' + flash.getMessage().cssClass" role="alert" data-ng-show="showAlert">
-                        <button type="button" class="close" data-ng-click="hideAlert()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        {{flash.getMessage().text}}
-                    </div>
-                    <div id="main" data-ng-view>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div id="footer">
+		</div>
+
+		<div class="container">
+			<div class="row row-offcanvas row-offcanvas-left">
+				<!-- sidebar -->
+				<div class="col-xs-6 col-sm-3 well sidebar-offcanvas">
+					<a href="app.html"> <img class="hidden-xs img-responsive"
+						src="img/dallas-semiconductor.png" alt="JBoss Forge"></img>
+					</a>
+					<nav class="sidebar-nav" data-ng-controller="NavController"
+						role="navigation">
+						<div id="sidebar-entries" class="list-group">
+							<a class="list-group-item"
+								data-ng-class="{active: matchesRoute('Sensors')}"
+								href="#/Sensors" data-toggle="offcanvas">Sensors</a> <a
+								class="list-group-item"
+								data-ng-class="{active: matchesRoute('SensorTypes')}"
+								href="#/SensorTypes" data-toggle="offcanvas">SensorTypes</a> <a
+								class="list-group-item"
+								data-ng-class="{active: matchesRoute('Graphs')}" href="#/Graphs"
+								data-toggle="offcanvas">Graphs</a>
+						</div>
+					</nav>
+				</div>
+				<!-- main area-->
+				<div class="col-sm-offset-1 col-xs-12 col-sm-8 well mainarea">
+					<div data-ng-controller="FlashController"
+						class="alert alert-dismissible"
+						data-ng-class="'alert-' + flash.getMessage().cssClass"
+						role="alert" data-ng-show="showAlert">
+						<button type="button" class="close" data-ng-click="hideAlert()"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						{{flash.getMessage().text}}
+					</div>
+					<div id="main" data-ng-view></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- div id="footer">
         <div class="container">
             <p>Powered by <a href="http://jboss.org/forge">Forge</a></p>
             <p><a href="http://glyphicons.com">Glyphicons Free</a> licensed under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
         </div>
-    </div>
-    
-    <script src="scripts/vendor/modernizr-2.8.3.min.js"></script>
-    <script src="scripts/vendor/jquery-2.1.1.js"></script>
-    <script src="scripts/vendor/bootstrap.js"></script>
-    <script src="scripts/vendor/angular.js"></script>
-    <script src="scripts/vendor/angular-route.js"></script>
-    <script src="scripts/vendor/angular-resource.js"></script>
-    <script src="scripts/app.js"></script>
-    <script src="scripts/offcanvas.js"></script>
-    <script src="scripts/directives/datepicker.js"></script>
-    <script src="scripts/directives/timepicker.js"></script>
-    <script src="scripts/directives/datetimepicker.js"></script>
-    <script src="scripts/filters/startFromFilter.js"></script>
-    <script src="scripts/filters/genericSearchFilter.js"></script>
-    <script src="scripts/services/flash.js"></script>
-    <script src="scripts/services/locationParser.js"></script>
-    <script src="scripts/controllers/flashController.js"></script>
-    <script src="scripts/services/SensorFactory.js"></script>
-    <script src="scripts/controllers/newSensorController.js"></script>
-    <script src="scripts/controllers/searchSensorController.js"></script>
-    <script src="scripts/controllers/editSensorController.js"></script>
-    <script src="scripts/services/SensorTypeFactory.js"></script>
-    <script src="scripts/controllers/newSensorTypeController.js"></script>
-    <script src="scripts/controllers/searchSensorTypeController.js"></script>
-    <script src="scripts/controllers/editSensorTypeController.js"></script>
-    <script src="scripts/services/TemperatureFactory.js"></script>
-    <script src="scripts/controllers/newTemperatureController.js"></script>
-    <script src="scripts/controllers/searchTemperatureController.js"></script>
-    <script src="scripts/controllers/editTemperatureController.js"></script>
-    <script src="scripts/services/TemperaturesArchiveFactory.js"></script>
-    <script src="scripts/controllers/newTemperaturesArchiveController.js"></script>
-    <script src="scripts/controllers/searchTemperaturesArchiveController.js"></script>
-    <script src="scripts/controllers/editTemperaturesArchiveController.js"></script>
-    
-    
+    </div-->
+
+	<script src="scripts/vendor/modernizr-2.8.3.min.js"></script>
+	<script src="scripts/vendor/jquery-2.1.1.js"></script>
+	<script src="scripts/vendor/bootstrap.js"></script>
+	<script src="scripts/vendor/angular.js"></script>
+	<script src="scripts/vendor/angular-route.js"></script>
+	<script src="scripts/vendor/angular-resource.js"></script>
+	<script src="scripts/app.js"></script>
+	<script src="scripts/offcanvas.js"></script>
+	<script src="scripts/directives/datepicker.js"></script>
+	<script src="scripts/directives/timepicker.js"></script>
+	<script src="scripts/directives/datetimepicker.js"></script>
+	<script src="scripts/filters/startFromFilter.js"></script>
+	<script src="scripts/filters/genericSearchFilter.js"></script>
+	<script src="scripts/services/flash.js"></script>
+	<script src="scripts/services/locationParser.js"></script>
+	<script src="scripts/controllers/flashController.js"></script>
+	<script src="scripts/services/SensorFactory.js"></script>
+	<script src="scripts/controllers/newSensorController.js"></script>
+	<script src="scripts/controllers/searchSensorController.js"></script>
+	<script src="scripts/controllers/editSensorController.js"></script>
+	<script src="scripts/services/SensorTypeFactory.js"></script>
+	<script src="scripts/controllers/newSensorTypeController.js"></script>
+	<script src="scripts/controllers/searchSensorTypeController.js"></script>
+	<script src="scripts/controllers/editSensorTypeController.js"></script>
+	<script src="scripts/services/TemperatureFactory.js"></script>
+	<script src="scripts/controllers/newTemperatureController.js"></script>
+	<script src="scripts/controllers/searchTemperatureController.js"></script>
+	<script src="scripts/controllers/editTemperatureController.js"></script>
+	<script src="scripts/services/TemperaturesArchiveFactory.js"></script>
+	<script src="scripts/controllers/newTemperaturesArchiveController.js"></script>
+	<script
+		src="scripts/controllers/searchTemperaturesArchiveController.js"></script>
+	<script src="scripts/controllers/editTemperaturesArchiveController.js"></script>
+	<script type="text/javascript"
+		src="https://www.gstatic.com/charts/loader.js"></script>
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script type="text/javascript">
+    google.load('visualization', '1', {'packages':['corechart']});
+    //google.setOnLoadCallback(drawChart);
+    function drawChart(url) {			
+			var jsonData = $.ajax({
+      	 	 	url: url,
+     	   		dataType:"json",
+    	    	async: false
+          		}).responseText;
+    		var data = new google.visualization.DataTable(jsonData);
+    		var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+      		chart.draw(data, {height:600});
+    }
+    </script>
+
 </body>
 </html>
