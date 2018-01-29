@@ -63,10 +63,13 @@ public class DataEndpoint {
 				+ "range = The range of the peak (Default:" + DataUtil.DEFAULT_PEAK_RANGE + ")\n"
 				+ "minpeakvalue = Minimun value of peak (Default:" + DataUtil.DEFAULT_MIN_PEAK_VALUE + ")\n\n"
 
-				+ "getnoofpeaks API: /getnoofpeaks/{id}/{noofminutes}/{range}/{minpeakvalue}\n" + "id = Sensor ID\n"
-				+ "noofminutes = Size of dataset in minutes (Default:" + DataEndpoint.DEFAULT_NO_OF_MINUTES + ")\n"
-				+ "range = The range of the peak (Default:" + DataUtil.DEFAULT_PEAK_RANGE + ")\n"
-				+ "minpeakvalue = Minimun value of peak (Default:" + DataUtil.DEFAULT_MIN_PEAK_VALUE + ")\n\n"
+				+ "getnoofpeaks API: /getnoofpeaks/{id}/{noofminutes}/{range}/{minpeakvalue}/{trimrange}\n"
+				+ "id = Sensor ID\n" + "noofminutes = Size of dataset in minutes (Default:"
+				+ DataEndpoint.DEFAULT_NO_OF_MINUTES + ")\n" + "range = The range of the peak (Default:"
+				+ DataUtil.DEFAULT_PEAK_RANGE + ")\n" + "minpeakvalue = Minimun value of peak (Default:"
+				+ DataUtil.DEFAULT_MIN_PEAK_VALUE + ")\n"
+				+ "trimrange = Values outside the trimrange are excluded(Default:" + DataUtil.DEFAULT_TRIM_RANGE
+				+ ")\n\n"
 
 				+ "temperature API: /temperature/{id}\n" + "id = Sensor ID\n\n";
 
@@ -302,6 +305,15 @@ public class DataEndpoint {
 	public int getNoOfPeaksByIdTimeRangeAndMinValue(@PathParam("id") int id, @PathParam("noofminutes") int noofminutes,
 			@PathParam("range") int range, @PathParam("minpeakvalue") int minpeakvalue) {
 		return DataUtil.FindPeaksInDataset(getDataSet(id, noofminutes), range, minpeakvalue).size();
+	}
+
+	@GET
+	@Path("/getnoofpeaks/{id:[0-9][0-9]*}/{noofminutes:[0-9][0-9]*}/{range:[0-9][0-9]*}/{minpeakvalue:[0-9][0-9]*}/{trimrange:[0-9][0-9]*}")
+	@Produces("application/json")
+	public int getNoOfPeaksByIdTimeRangeAndMinValue(@PathParam("id") int id, @PathParam("noofminutes") int noofminutes,
+			@PathParam("range") int range, @PathParam("minpeakvalue") int minpeakvalue,
+			@PathParam("trimrange") int trimrange) {
+		return DataUtil.FindPeaksInDataset(getDataSet(id, noofminutes), range, minpeakvalue, trimrange).size();
 	}
 
 	private TemperatureDTO getTemperature(int id) {

@@ -7,8 +7,7 @@
 	<artifactId>OWManager</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>Java EE 6 HTML5 Mobile Web Application</name>
-	<description>This project contains pre-requisites for demonstrating the use of JBoss Forge. The end-user will be instructed on how to scaffold a new application based on a pre-existing JPA entity. Refer to the embedded Eclipse cheatsheet for additional details.</description>
+	<name>One-wire Manager Application</name>
 	<properties>
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
@@ -84,7 +83,6 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>OWManager</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
