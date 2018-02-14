@@ -8,8 +8,9 @@ public class SVG {
 	private int height;
 	private List<Definition> definitions = new ArrayList<Definition>();
 	private List<Shape> shapes = new ArrayList<Shape>();
-
 	private boolean dynamic = false;
+	public static String newline = "\n";
+	public static String indent = " ";
 
 	public SVG(int width, int height) {
 		super();
@@ -53,6 +54,8 @@ public class SVG {
 		} else {
 			startTag = "<svg width='" + width + "' height='" + height + "'>";
 		}
-		return startTag + getDefinitionsString() + getShapesString() + "</svg>";
+		String endtag = "</svg>";
+		return startTag + newline + indent + "<defs>" + getDefinitionsString() + newline + indent + "</defs>"
+				+ getShapesString() + newline + endtag;
 	}
 }

@@ -7,16 +7,15 @@ public class Stop {
 
 	@Override
 	public String toString() {
-		String offsetString = " offset='" + offset + "'";
-		String stopColorString = "";
+		StringBuilder sb = new StringBuilder(SVG.newline + SVG.indent + SVG.indent + "<stop offset='" + offset + "'");
 		if (color != null) {
-			stopColorString = " stop-color='" + color + "'";
+			sb.append(" stop-color='" + color + "'");
 		}
-		String stopOpacityString = "";
 		if (opacity != 1) {
-			stopColorString = " stop-opacity='" + opacity + "'";
+			sb.append(" stop-opacity='" + opacity + "'");
 		}
-		return "<stop" + offsetString + stopColorString + stopOpacityString + "/>\n";
+		sb.append("/>");
+		return sb.toString();
 	}
 
 	public Stop(String offset) {
@@ -35,5 +34,11 @@ public class Stop {
 		this.offset = offset;
 		this.color = color;
 		this.opacity = opacity;
+	}
+
+	public Stop(int percent, String color) {
+		super();
+		this.offset = percent + "%";
+		this.color = color;
 	}
 }

@@ -67,8 +67,9 @@ public class LinearGradient implements Definition, Gradient {
 		for (Stop s : stops) {
 			stopTags += s.toString();
 		}
-		return "<linearGradient id='" + id + "' x1='" + x1 + "' y1='" + y1 + "' x2='" + x2 + "' y2='" + y2 + "'>\n"
-				+ stopTags + "</linearGradient>";
+		String newline = SVG.newline + SVG.indent + SVG.indent;
+		return newline + "<linearGradient id='" + id + "' x1='" + x1 + "' y1='" + y1 + "' x2='" + x2 + "' y2='" + y2
+				+ "'>" + stopTags + newline + "</linearGradient>";
 	}
 
 	@Override

@@ -114,15 +114,15 @@
 	<script type="text/javascript">
     google.load('visualization', '1', {'packages':['corechart']});
     //google.setOnLoadCallback(drawChart);
-    function drawChart(url) {			
+    function drawChart(url,chartdiv,options) {			
 			var jsonData = $.ajax({
       	 	 	url: url,
      	   		dataType:"json",
     	    	async: false
           		}).responseText;
     		var data = new google.visualization.DataTable(jsonData);
-    		var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-      		chart.draw(data, {height:600});
+    		var chart = new google.visualization.LineChart(document.getElementById(chartdiv));	
+      		chart.draw(data, options);
     }
     </script>
 

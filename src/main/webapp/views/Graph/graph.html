@@ -1,5 +1,24 @@
+<script type="text/javascript">
+var options = {
+		chartArea: {width: '100%', height: '100%'},
+		legend: {position: 'in'},
+		titlePosition: 'in', axisTitlesPosition: 'in',
+		hAxis: {textPosition: 'none'}, 
+		vAxis: {textPosition: 'in'}
+	};
+var timerId1 = setInterval(drawChart('rest/data/getdatatable/3,4,5/1440','chart_stove',options), 120000);
+var timerId2 = setInterval(drawChart('rest/data/getdatatable/6,7,8/1440','chart_vp-acc',options), 120000);
+var timerId3 = setInterval(drawChart('rest/data/getdatatable/31/1440','chart_vp',options), 120000);
+var accsvg = $.ajax({
+	 	url: "rest/svg/heating",
+		dataType:"svg",
+	async: false
+		}).responseText;
+document.getElementById('chart_acc').innerHTML = accsvg;
+</script>
 
-  <input id="url" type="text" value="rest/data/getdatatable/14/1440"></input>
-  <button onclick="drawChart(document.getElementById('url').value)" type="button">draw graph</button>
-<A HREF="javascript:history.go(0)">Click to refres h the page</A>
-  <div id="chart_div"></div>
+  <div id="chart_stove"></div>
+  <div id="chart_vp-acc"></div>
+  <div id="chart_vp"></div>
+  <div id="chart_acc"></div>
+  

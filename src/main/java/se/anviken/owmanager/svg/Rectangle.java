@@ -83,7 +83,7 @@ public class Rectangle extends BasicShape implements Shape {
 				radiusValuesString = " rx='" + rx + "' ry='" + ry + "'";
 			}
 		}
-		return "<rect x='" + x + "' y='" + y + "'" + radiusValuesString + " width='" + width + "' height='" + height
+		return "\n <rect x='" + x + "' y='" + y + "'" + radiusValuesString + " width='" + width + "' height='" + height
 				+ "'" + getBasicShapeAttribute() + "/>";
 	}
 
