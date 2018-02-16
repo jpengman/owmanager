@@ -13,7 +13,7 @@
     <welcome-file>/index.html</welcome-file>
   </welcome-file-list>
   
-  <!-- security-constraint>
+  <security-constraint>
       <web-resource-collection>
          <web-resource-name>HtmlAuth</web-resource-name>
          <description>application security constraints</description>
@@ -26,6 +26,6 @@
    <login-config>
       <auth-method>BASIC</auth-method>
       <realm-name>ApplicationRealm</realm-name>
-   </login-config -->
+   </login-config>
    
 </web-app>

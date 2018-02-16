@@ -24,7 +24,6 @@ function drawContent(){
 function showSlider(){
 	document.getElementById("range_output").style.display = 'block';
 	document.getElementById("chart_range").style.display = 'block';	
-		
 }
 function hideSlider(){
 	document.getElementById("range_output").style.display = 'none';
@@ -45,11 +44,11 @@ var request='';
 var time="360";
 hideSlider()
 drawTanks();
-setInterval(drawContent,60000);
+var timer = setInterval(drawContent,60000);
 
 
-$('#stove_btn').click(function () {request = '3,4,5'; content='chartByID'; drawContent();});
-$('#acc_btn').click(function () {request = '6,7,8'; content='chartByID'; drawContent();});
+$('#stove_btn').click(function () {request = 'HEATING_FP_ACC'; content='chartByType'; drawContent();});
+$('#acc_btn').click(function () {request = 'HEATING_ACC_HP'; content='chartByType'; drawContent();});
 $('#vp_btn').click(function () {request = '31';  content='chartByID'; drawContent();});
 $('#floor_btn').click(function () {request = 'HEATING_FH';  content='chartByType'; drawContent();});
 $('#tanks_btn').click(function () {content='tanks'; drawContent();});
@@ -65,7 +64,9 @@ document.getElementById("chart_range").oninput = function() {
 </script>
 <div class="text-center">
 	<div class="btn-group btn-group-xs">
-		<button id="tanks_btn" type="button" class="btn btn-default"><span class="glyphicon glyphicon-home"></span></button>
+		<button id="tanks_btn" type="button" class="btn btn-default">
+			<span class="glyphicon glyphicon-home"></span>
+		</button>
 		<button id="stove_btn" type="button" class="btn btn-default">Vedspisen</button>
 		<button id="acc_btn" type="button" class="btn btn-default">Tanken</button>
 		<button id="vp_btn" type="button" class="btn btn-default">Värmpumpen</button>
