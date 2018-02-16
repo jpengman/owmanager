@@ -39,15 +39,22 @@
 						role="navigation">
 						<div id="sidebar-entries" class="list-group">
 							<a class="list-group-item"
+								data-ng-class="{active: matchesRoute('Heating')}" href="#/Heating"
+								data-toggle="offcanvas">Heating</a>
+							<a class="list-group-item"
+								data-ng-class="{active: matchesRoute('Graphs')}" href="#/Graphs"
+								data-toggle="offcanvas">Graphs</a>
+						</div>
+						<div id="sidebar-entries" class="list-group">
+							<a class="list-group-item"
 								data-ng-class="{active: matchesRoute('Sensors')}"
 								href="#/Sensors" data-toggle="offcanvas">Sensors</a> <a
 								class="list-group-item"
 								data-ng-class="{active: matchesRoute('SensorTypes')}"
-								href="#/SensorTypes" data-toggle="offcanvas">SensorTypes</a> <a
-								class="list-group-item"
-								data-ng-class="{active: matchesRoute('Graphs')}" href="#/Graphs"
-								data-toggle="offcanvas">Graphs</a>
+								href="#/SensorTypes" data-toggle="offcanvas">SensorTypes</a>
 						</div>
+
+
 					</nav>
 				</div>
 				<!-- main area-->

@@ -16,6 +16,7 @@ angular.module('oWManager',['ngRoute','ngResource'])
       .when('/TemperaturesArchives',{templateUrl:'views/TemperaturesArchive/search.html',controller:'SearchTemperaturesArchiveController'})
       .when('/TemperaturesArchives/new',{templateUrl:'views/TemperaturesArchive/detail.html',controller:'NewTemperaturesArchiveController'})
       .when('/TemperaturesArchives/edit/:TemperaturesArchiveId',{templateUrl:'views/TemperaturesArchive/detail.html',controller:'EditTemperaturesArchiveController'})
+      .when('/Heating',{templateUrl:'views/Graph/heating.html'})
       .when('/Graphs',{templateUrl:'views/Graph/graph.html'})
       .otherwise({
         redirectTo: '/'

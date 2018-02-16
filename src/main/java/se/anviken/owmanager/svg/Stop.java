@@ -7,7 +7,7 @@ public class Stop {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder(SVG.newline + SVG.indent + SVG.indent + "<stop offset='" + offset + "'");
+		StringBuilder sb = new StringBuilder(SVG.newline + SVG.indent + SVG.indent+"<stop offset='" + offset + "'");
 		if (color != null) {
 			sb.append(" stop-color='" + color + "'");
 		}

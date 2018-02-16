@@ -30,7 +30,7 @@ public class SVGEndpoint {
 	@Produces("text/html")
 	public String heating() {
 		int rulerYpos = 245;
-		SVG svg = new SVG(600, 400);
+		SVG svg = new SVG(352, 400);
 		Rectangle accRect = new Rectangle(200, 3, 20, 20, 150, 300);
 		Rectangle hpRect = new Rectangle(3, 3, 20, 20, 150, 200);
 		Rectangle ruler = new Rectangle(3, rulerYpos, 0, 0, 150, 15);

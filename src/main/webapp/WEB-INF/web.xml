@@ -20,12 +20,12 @@
          <url-pattern>/*</url-pattern>
       </web-resource-collection>
       <auth-constraint>
-         <role-name>user</role-name>
+         <role-name>users</role-name>
       </auth-constraint>
    </security-constraint>
    <login-config>
       <auth-method>BASIC</auth-method>
       <realm-name>ApplicationRealm</realm-name>
-   </login-config-->
+   </login-config -->
    
 </web-app>

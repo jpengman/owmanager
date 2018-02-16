@@ -55,6 +55,9 @@ public class DataEndpoint {
 				+ "ids = Sensor ID:s comma separated\n" + "noofminutes = Size of dataset in minutes (Default:"
 				+ DataEndpoint.DEFAULT_NO_OF_MINUTES + ")\n\n"
 
+				+ "getdatatable API: /getdatatablebytype/{type}/{noofminutes}\n" + "type = Sensor type\n"
+				+ "noofminutes = Size of dataset in minutes (Default:" + DataEndpoint.DEFAULT_NO_OF_MINUTES + ")\n\n"
+
 				+ "getminavgmax API: getminavgmax/{type}/{id}\n"
 				+ "type = Type of graph, allowed values:day,week,month,year\n" + "id = Sensor ID\n"
 
@@ -142,6 +145,47 @@ public class DataEndpoint {
 				.build();
 	}
 
+	private Response getDatatableByType(String type, int noofminutes) {
+		String[] typeArray = type.split("\\s*,\\s*");
+		List<String> sensorTypes = Arrays.asList(typeArray);
+		TypedQuery<Sensor> query = em
+				.createQuery("SELECT s FROM Sensor s where s.sensorType.sensorType IN :sensorTypes", Sensor.class);
+		query.setParameter("sensorTypes", sensorTypes);
+		final List<Sensor> results = query.getResultList();
+		DataTable data = new DataTable();
+		ArrayList<ColumnDescription> cd = new ArrayList<ColumnDescription>();
+		cd.add(new ColumnDescription("Tid", ValueType.TEXT, "Tid"));
+
+		List<Map<Date, Float>> temperatureLists = new ArrayList<Map<Date, Float>>();
+		Set<Date> timestamps = new HashSet<Date>();
+
+		for (Sensor sensor : results) {
+			cd.add(new ColumnDescription(sensor.getName(), ValueType.NUMBER, sensor.getName()));
+			Map<Date, Float> temperarures = new HashMap<Date, Float>();
+			for (Temperature temperature : getDataSet(sensor.getSensorId(), noofminutes)) {
+				temperarures.put(temperature.getTempTimestamp(), temperature.getTemperature());
+				timestamps.add(temperature.getTempTimestamp());
+			}
+			temperatureLists.add(temperarures);
+		}
+		data.addColumns(cd);
+		timestamps = new TreeSet<Date>(timestamps);
+		for (Date timestamp : timestamps) {
+			TableRow row = new TableRow();
+			row.addCell(TimeUtil.getTimeOfDay(timestamp));
+			for (Map<Date, Float> temperatureList : temperatureLists) {
+				row.addCell(temperatureList.get(timestamp));
+			}
+			try {
+				data.addRow(row);
+			} catch (TypeMismatchException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return Response.ok(JsonRenderer.renderDataTable(data, true, false, true).toString(), MediaType.APPLICATION_JSON)
+				.build();
+	}
 	/*
 	 * private Response getHPDatatable() {
 	 * 
@@ -177,6 +221,22 @@ public class DataEndpoint {
 	@Produces("application/json")
 	public Response getDataTableByIdAndTime(@PathParam("ids") String ids, @PathParam("noofminutes") int noofminutes) {
 		return getDatatable(ids, noofminutes);
+	}
+
+	/// getdatatablebytype/{type}/{noofminutes}
+	@GET
+	@Path("/getdatatablebytype/{type}")
+	@Produces("application/json")
+	public Response getDataTableByType(@PathParam("type") String type) {
+		return getDatatableByType(type, DataEndpoint.DEFAULT_NO_OF_MINUTES);
+	}
+
+	@GET
+	@Path("/getdatatablebytype/{type}/{noofminutes:[0-9][0-9]*}")
+	@Produces("application/json")
+	public Response getDataTableByTypeAndTime(@PathParam("type") String type,
+			@PathParam("noofminutes") int noofminutes) {
+		return getDatatableByType(type, noofminutes);
 	}
 
 	@GET
