@@ -20,8 +20,6 @@ import se.anviken.owmanager.utils.ColorUtil;
 @Stateless
 @Path("/svg")
 public class SVGEndpoint {
-	private static final String DEFS_END_TAG = "</defs>\n";
-	private static final String DEFS_START_TAG = "<defs>\n";
 	@PersistenceContext(unitName = "OWManager-persistence-unit")
 	private EntityManager em;
 

@@ -43,6 +43,10 @@ import se.anviken.owmanager.utils.TimeUtil;
 @Stateless
 @Path("/data")
 public class DataEndpoint {
+	private static final String YEARS = "years";
+	private static final String MONTHS = "months";
+	private static final String WEEKS = "weeks";
+	private static final String DAYS = "days";
 	private static final int DEFAULT_NO_OF_MINUTES = 60;
 	@PersistenceContext(unitName = "OWManager-persistence-unit")
 	private EntityManager em;
@@ -59,7 +63,7 @@ public class DataEndpoint {
 				+ "noofminutes = Size of dataset in minutes (Default:" + DataEndpoint.DEFAULT_NO_OF_MINUTES + ")\n\n"
 
 				+ "getminavgmax API: getminavgmax/{type}/{id}\n"
-				+ "type = Type of graph, allowed values:day,week,month,year\n" + "id = Sensor ID\n"
+				+ "type = Type of graph, allowed values:days,weeks,months,years\n" + "id = Sensor ID\n\n"
 
 				+ "getpeaks API: /getpeaks/{id:[0-9][0-9]*}/{noofminutes}/{range}/{minpeakvalue}\n" + "id = Sensor ID\n"
 				+ "noofminutes = Size of dataset in minutes (Default:" + DataEndpoint.DEFAULT_NO_OF_MINUTES + ")\n"
@@ -244,8 +248,8 @@ public class DataEndpoint {
 	@Produces("application/json")
 	public Response getMinAvgMaxDataTableById(@PathParam("id") int id, @PathParam("type") String type) {
 
-		if (type.equalsIgnoreCase("day") || type.equalsIgnoreCase("week") || type.equalsIgnoreCase("month")
-				|| type.equalsIgnoreCase("year")) {
+		if (type.equalsIgnoreCase(DAYS) || type.equalsIgnoreCase(WEEKS) || type.equalsIgnoreCase(MONTHS)
+				|| type.equalsIgnoreCase(YEARS)) {
 			String queryString = getMinAvgMaxQueryString(type, id);
 
 			Query query = em.createNativeQuery(queryString);
@@ -277,14 +281,14 @@ public class DataEndpoint {
 					.ok(JsonRenderer.renderDataTable(data, true, false, true).toString(), MediaType.APPLICATION_JSON)
 					.build();
 		} else {
-			return Response.noContent().build();
+			return Response.ok("Use types DAYS,WEEKS,MONTH or YEAR").build();
 		}
 	}
 
 	private String formatTimeSting(Object[] record, String type) {
-		if (type.equalsIgnoreCase("day")) {
+		if (type.equalsIgnoreCase(DAYS)) {
 			return record[3] + "-" + record[4] + "-" + record[5];
-		} else if (type.equalsIgnoreCase("year")) {
+		} else if (type.equalsIgnoreCase(YEARS)) {
 			return record[3].toString();
 		} else {
 			return record[3] + "-" + record[4];
@@ -294,11 +298,11 @@ public class DataEndpoint {
 	private String getMinAvgMaxQueryString(String type, int id) {
 		String baseSelect = "SELECT ROUND(MIN(ta.temperature),1),ROUND(AVG(ta.temperature),1),ROUND(MAX(ta.temperature),1),";
 		String typeSelect = "YEAR(ta.temp_timestamp)";
-		if (type.equalsIgnoreCase("day")) {
+		if (type.equalsIgnoreCase(DAYS)) {
 			typeSelect += ",MONTH(ta.temp_timestamp),DAY(ta.temp_timestamp)";
-		} else if (type.equalsIgnoreCase("week")) {
+		} else if (type.equalsIgnoreCase(WEEKS)) {
 			typeSelect += ",WEEK(ta.temp_timestamp)";
-		} else if (type.equalsIgnoreCase("month")) {
+		} else if (type.equalsIgnoreCase(MONTHS)) {
 			typeSelect += ",MONTH(ta.temp_timestamp)";
 		}
 		String fromString = "FROM temperatures_archive ta " + "WHERE ta.sensor_id = " + id + " ";

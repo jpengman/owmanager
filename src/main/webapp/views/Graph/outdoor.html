@@ -1,0 +1,67 @@
+<script type="text/javascript">
+
+function drawContent(){
+		if(request=='HOME'){
+			showSlider();
+			drawChart('rest/data/getdatatablebytype/OUTSIDE/'+time,'content',options);
+			}
+		else{
+			hideSlider();
+			drawChart(baseurl+request+'/14','content',options);
+			}
+			
+}
+function showSlider(){
+	document.getElementById("range_output").style.display = 'block';
+	document.getElementById("chart_range").style.display = 'block';	
+}
+function hideSlider(){
+	document.getElementById("range_output").style.display = 'none';
+	document.getElementById("chart_range").style.display = 'none';	
+}
+var content= document.getElementById("content");
+var options = {
+		chartArea: {width: '100%', height: '100%'},
+		legend: {position: 'in'},
+		titlePosition: 'in', axisTitlesPosition: 'in',
+		hAxis: {textPosition: 'none'}, 
+		vAxis: {textPosition: 'in'}
+	};
+
+var baseurl='rest/data/getminavgmax/';
+var request='HOME';
+var time="360";
+drawContent();
+
+$('#home_btn').click(function () {request = 'HOME'; drawContent();});
+$('#days_btn').click(function () {request = 'DAYS'; drawContent();});
+$('#weeks_btn').click(function () {request = 'WEEKS'; drawContent();});
+$('#month_btn').click(function () {request = 'MONTHS'; drawContent();});
+$('#years_btn').click(function () {request = 'YEARS'; drawContent();});
+
+$('#chart_range').change(function () {time = document.getElementById('chart_range').value; drawContent(); });
+
+document.getElementById("chart_range").oninput = function() {
+	time = this.value
+	var hours = this.value/60;
+	var hoursString=' Timmar';
+	if(hours==1){hoursString= ' Timme';}
+	document.getElementById("range_output").innerHTML = hours+hoursString;
+}
+
+</script>
+<div class="text-center">
+	<div class="btn-group btn-group-xs">
+		<button id="home_btn" type="button" class="btn btn-default">
+			<span class="glyphicon glyphicon-home"></span>
+		</button>
+		<button id="days_btn" type="button" class="btn btn-default">Dagar</button>
+		<button id="weeks_btn" type="button" class="btn btn-default">Veckor</button>
+		<button id="month_btn" type="button" class="btn btn-default">Månader</button>
+		<button id="years_btn" type="button" class="btn btn-default">År</button>
+	</div>
+	<div id="content"></div>
+	<input type="range" min="60" max="1440" value="360" step="60"
+		id="chart_range" style.display='none'>
+	<div id="range_output" class='none'>6 Timmar</div>
+</div>

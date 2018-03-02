@@ -11,6 +11,7 @@
 <link href="styles/bootstrap.css" rel="stylesheet" media="screen">
 <link href="styles/bootstrap-theme.css" rel="stylesheet" media="screen">
 <link href="styles/main.css" rel="stylesheet" media="screen">
+
 </head>
 <body>
 	<div id="wrap">
@@ -41,6 +42,9 @@
 							<a class="list-group-item"
 								data-ng-class="{active: matchesRoute('Heating')}" href="#/Heating"
 								data-toggle="offcanvas">Heating</a>
+								<a class="list-group-item"
+								data-ng-class="{active: matchesRoute('Outdoor')}" href="#/Outdoor"
+								data-toggle="offcanvas">Outdoor</a>
 							<a class="list-group-item"
 								data-ng-class="{active: matchesRoute('Graphs')}" href="#/Graphs"
 								data-toggle="offcanvas">Graphs</a>
@@ -74,13 +78,6 @@
 			</div>
 		</div>
 	</div>
-
-	<!-- div id="footer">
-        <div class="container">
-            <p>Powered by <a href="http://jboss.org/forge">Forge</a></p>
-            <p><a href="http://glyphicons.com">Glyphicons Free</a> licensed under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
-        </div>
-    </div-->
 
 	<script src="scripts/vendor/modernizr-2.8.3.min.js"></script>
 	<script src="scripts/vendor/jquery-2.1.1.js"></script>
@@ -121,14 +118,15 @@
 	<script type="text/javascript">
     google.load('visualization', '1', {'packages':['corechart']});
     //google.setOnLoadCallback(drawChart);
-    function drawChart(url,chartdiv,options) {			
-			var jsonData = $.ajax({
+    function drawChart(url,targetDivId,options) {
+		var chartDiv = document.getElementById(targetDivId);
+		var jsonData = $.ajax({
       	 	 	url: url,
      	   		dataType:"json",
     	    	async: false
           		}).responseText;
     		var data = new google.visualization.DataTable(jsonData);
-    		var chart = new google.visualization.LineChart(document.getElementById(chartdiv));	
+    		var chart = new google.visualization.LineChart(chartDiv);	
       		chart.draw(data, options);
     }
     </script>
