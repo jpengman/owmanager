@@ -27,7 +27,9 @@ import com.google.visualization.datasource.datatable.TableRow;
 import com.google.visualization.datasource.datatable.value.ValueType;
 import com.google.visualization.datasource.render.JsonRenderer;
 
+import se.anviken.owmanager.Constants;
 import se.anviken.owmanager.dto.TemperatureDTO;
+import se.anviken.owmanager.model.MinAvgMax;
 import se.anviken.owmanager.model.Sensor;
 import se.anviken.owmanager.model.Temperature;
 import se.anviken.owmanager.utils.TimeUtil;
@@ -159,6 +161,35 @@ public class PersistenceHelper {
 		}
 		float temperature = entity.getLastLoggedTemp() + entity.getOffset();
 		return new TemperatureDTO(entity.getLastLogged(), temperature);
+	}
+
+	protected List<MinAvgMax> getMinAvgMaxByType(String type) {
+		TypedQuery<MinAvgMax> minAvgMaxResult = null;
+		System.out.println(type);
+		switch (type.toLowerCase()) {
+		case Constants.DAYS:
+			minAvgMaxResult = em.createNamedQuery("MinAvgMax.findByDay", MinAvgMax.class);
+			System.out.println(type);
+			break;
+
+		case Constants.WEEKS:
+			minAvgMaxResult = em.createNamedQuery("MinAvgMax.findByWeek", MinAvgMax.class);
+			break;
+
+		case Constants.MONTHS:
+			minAvgMaxResult = em.createNamedQuery("MinAvgMax.findByMonth", MinAvgMax.class);
+			break;
+
+		case Constants.YEARS:
+			minAvgMaxResult = em.createNamedQuery("MinAvgMax.findByYear", MinAvgMax.class);
+			break;
+		}
+
+		if (minAvgMaxResult != null) {
+			return minAvgMaxResult.getResultList();
+		} else {
+			return null;
+		}
 	}
 
 	protected List<Object[]> executeNativeQuery(String queryString) {
