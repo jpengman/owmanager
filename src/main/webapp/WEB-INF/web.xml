@@ -20,7 +20,7 @@
          <url-pattern>/*</url-pattern>
       </web-resource-collection>
       <auth-constraint>
-         <role-name>users</role-name>
+         <role-name>user</role-name>
       </auth-constraint>
    </security-constraint>
    <login-config>
