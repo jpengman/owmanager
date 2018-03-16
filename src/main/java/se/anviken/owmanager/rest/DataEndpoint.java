@@ -95,6 +95,7 @@ public class DataEndpoint extends PersistenceHelper {
 	@Produces("application/json")
 	public Response getDataTableByTypeAndTime(@PathParam("type") String type,
 			@PathParam("noofminutes") int noofminutes) {
+		System.out.println("Type:" + type + " time:" + noofminutes);
 		return getDatatableByType(type, noofminutes);
 	}
 

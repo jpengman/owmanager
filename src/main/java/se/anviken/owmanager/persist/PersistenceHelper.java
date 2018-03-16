@@ -24,6 +24,7 @@ import com.google.visualization.datasource.base.TypeMismatchException;
 import com.google.visualization.datasource.datatable.ColumnDescription;
 import com.google.visualization.datasource.datatable.DataTable;
 import com.google.visualization.datasource.datatable.TableRow;
+import com.google.visualization.datasource.datatable.value.Value;
 import com.google.visualization.datasource.datatable.value.ValueType;
 import com.google.visualization.datasource.render.JsonRenderer;
 
@@ -36,6 +37,7 @@ import se.anviken.owmanager.utils.TimeUtil;
 
 @Stateless
 public class PersistenceHelper {
+	private static final Value NULL_NUMBER_VALUE = Value.getNullValueFromValueType(ValueType.NUMBER);
 	@PersistenceContext(unitName = "OWManager-persistence-unit")
 	private EntityManager em;
 
@@ -59,6 +61,10 @@ public class PersistenceHelper {
 				.createQuery("SELECT s FROM Sensor s where s.sensorType.sensorType IN :sensorTypes", Sensor.class);
 		query.setParameter("sensorTypes", sensorTypes);
 		final List<Sensor> results = query.getResultList();
+		return createDataTable(noofminutes, results);
+	}
+
+	private Response createDataTable(int noofminutes, final List<Sensor> sensors) {
 		DataTable data = new DataTable();
 		ArrayList<ColumnDescription> cd = new ArrayList<ColumnDescription>();
 		cd.add(new ColumnDescription("Tid", ValueType.TEXT, "Tid"));
@@ -66,7 +72,7 @@ public class PersistenceHelper {
 		List<Map<Date, Float>> temperatureLists = new ArrayList<Map<Date, Float>>();
 		Set<Date> timestamps = new HashSet<Date>();
 
-		for (Sensor sensor : results) {
+		for (Sensor sensor : sensors) {
 			cd.add(new ColumnDescription(sensor.getName(), ValueType.NUMBER, sensor.getName()));
 			Map<Date, Float> temperarures = new HashMap<Date, Float>();
 			for (Temperature temperature : getDataSet(sensor.getSensorId(), noofminutes)) {
@@ -82,17 +88,24 @@ public class PersistenceHelper {
 			TableRow row = new TableRow();
 			row.addCell(TimeUtil.getTimeOfDay(timestamp));
 			for (Map<Date, Float> temperatureList : temperatureLists) {
-				row.addCell(temperatureList.get(timestamp));
+				if (temperatureList.get(timestamp) != null) {
+					row.addCell(temperatureList.get(timestamp));
+				} else {
+					row.addCell(NULL_NUMBER_VALUE);
+				}
 			}
 			try {
 				data.addRow(row);
 			} catch (TypeMismatchException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		return Response.ok(JsonRenderer.renderDataTable(data, true, false, true).toString(), MediaType.APPLICATION_JSON)
-				.build();
+		return Response.ok(fixJson(JsonRenderer.renderDataTable(data, true, true, true).toString()),
+				MediaType.APPLICATION_JSON).build();
+	}
+
+	private String fixJson(String string) {
+		return string.replaceAll(",,", ",{\"v\":null},");
 	}
 
 	protected Response getDatatable(String ids, int noofminutes) {
@@ -108,41 +121,7 @@ public class PersistenceHelper {
 		TypedQuery<Sensor> query = em.createQuery("SELECT s FROM Sensor s where s.sensorId IN :sensors", Sensor.class);
 		query.setParameter("sensors", sensorIDs);
 		final List<Sensor> results = query.getResultList();
-		DataTable data = new DataTable();
-		ArrayList<ColumnDescription> cd = new ArrayList<ColumnDescription>();
-		cd.add(new ColumnDescription("Tid", ValueType.TEXT, "Tid"));
-		for (Sensor sensor : results) {
-			cd.add(new ColumnDescription(sensor.getName(), ValueType.NUMBER, sensor.getName()));
-		}
-		data.addColumns(cd);
-		List<Map<Date, Float>> temperatureLists = new ArrayList<Map<Date, Float>>();
-		Set<Date> timestamps = new HashSet<Date>();
-
-		for (int id : sensorIDs) {
-			Map<Date, Float> temperarures = new HashMap<Date, Float>();
-			for (Temperature temperature : getDataSet(id, noofminutes)) {
-				temperarures.put(temperature.getTempTimestamp(),
-						temperature.getTemperature() + temperature.getSensor().getOffset());
-				timestamps.add(temperature.getTempTimestamp());
-			}
-			temperatureLists.add(temperarures);
-		}
-		timestamps = new TreeSet<Date>(timestamps);
-		for (Date timestamp : timestamps) {
-			TableRow row = new TableRow();
-			row.addCell(TimeUtil.getTimeOfDay(timestamp));
-			for (Map<Date, Float> temperatureList : temperatureLists) {
-				row.addCell(temperatureList.get(timestamp));
-			}
-			try {
-				data.addRow(row);
-			} catch (TypeMismatchException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return Response.ok(JsonRenderer.renderDataTable(data, true, false, true).toString(), MediaType.APPLICATION_JSON)
-				.build();
+		return createDataTable(noofminutes, results);
 	}
 
 	protected TemperatureDTO getTemperature(int id) {
@@ -165,11 +144,9 @@ public class PersistenceHelper {
 
 	protected List<MinAvgMax> getMinAvgMaxByType(String type) {
 		TypedQuery<MinAvgMax> minAvgMaxResult = null;
-		System.out.println(type);
 		switch (type.toLowerCase()) {
 		case Constants.DAYS:
 			minAvgMaxResult = em.createNamedQuery("MinAvgMax.findByDay", MinAvgMax.class);
-			System.out.println(type);
 			break;
 
 		case Constants.WEEKS:
