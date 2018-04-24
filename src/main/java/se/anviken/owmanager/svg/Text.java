@@ -6,7 +6,17 @@ public class Text extends BasicShape implements Shape {
 	private int x;
 	private int y;
 	private Integer fontSize;
+
+	public String getTextAnchor() {
+		return textAnchor;
+	}
+
+	public void setTextAnchor(String textAnchor) {
+		this.textAnchor = textAnchor;
+	}
+
 	private String fontFamily;
+	private String textAnchor;
 
 	public Text(String text, int x, int y, int fontSize, String fontFamily) {
 		super();
@@ -81,6 +91,9 @@ public class Text extends BasicShape implements Shape {
 		}
 		if (getFontFamily() != null) {
 			sb.append(" font-family='" + getFontFamily() + "'");
+		}
+		if (getTextAnchor() != null) {
+			sb.append(" text-anchor='" + getTextAnchor() + "'");
 		}
 		sb.append(getBasicShapeAttribute() + ">" + getText() + "</text>");
 		return sb.toString();

@@ -104,6 +104,14 @@ public class PersistenceHelper {
 				MediaType.APPLICATION_JSON).build();
 	}
 
+	/**
+	 * It seems thats the JsonRenderer.renderDataTable() sometimes render null
+	 * values as ,, instead of "v":null, this fixes that with a replace all
+	 * 
+	 * @param string
+	 *            JSON string
+	 * @return fixed JSON string
+	 */
 	private String fixJson(String string) {
 		return string.replaceAll(",,", ",{\"v\":null},");
 	}
@@ -133,13 +141,9 @@ public class PersistenceHelper {
 		try {
 			entity = findByIdQuery.getSingleResult();
 		} catch (NoResultException nre) {
-			entity = null;
-		}
-		if (entity == null) {
 			return null;
 		}
-		float temperature = entity.getLastLoggedTemp() + entity.getOffset();
-		return new TemperatureDTO(entity.getLastLogged(), temperature);
+		return new TemperatureDTO(entity.getLastLogged(), entity.getLastLoggedTemp() + entity.getOffset());
 	}
 
 	protected List<MinAvgMax> getMinAvgMaxByType(String type) {
