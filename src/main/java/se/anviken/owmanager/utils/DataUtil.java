@@ -3,28 +3,29 @@ package se.anviken.owmanager.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import se.anviken.owmanager.model.Temperature;
+import se.anviken.owmanager.model.TemperatureReading;
 
 public class DataUtil {
 	public static final int DEFAULT_MIN_PEAK_VALUE = -256;
 	public static final int DEFAULT_PEAK_RANGE = 10;
 	public static final int DEFAULT_TRIM_RANGE = 3;
 
-	public static List<Temperature> FindPeaksInDataset(List<Temperature> points) {
+	public static List<TemperatureReading> FindPeaksInDataset(List<TemperatureReading> points) {
 		return FindPeaksInDataset(points, DEFAULT_PEAK_RANGE, DEFAULT_MIN_PEAK_VALUE, DEFAULT_TRIM_RANGE);
 	}
 
-	public static List<Temperature> FindPeaksInDataset(List<Temperature> points, int range) {
+	public static List<TemperatureReading> FindPeaksInDataset(List<TemperatureReading> points, int range) {
 		return FindPeaksInDataset(points, range, DEFAULT_MIN_PEAK_VALUE, DEFAULT_TRIM_RANGE);
 	}
 
-	public static List<Temperature> FindPeaksInDataset(List<Temperature> dataset, int range, int minpeakvalue) {
+	public static List<TemperatureReading> FindPeaksInDataset(List<TemperatureReading> dataset, int range,
+			int minpeakvalue) {
 		return FindPeaksInDataset(dataset, range, minpeakvalue, DEFAULT_TRIM_RANGE);
 	}
 
-	public static List<Temperature> FindPeaksInDataset(List<Temperature> dataset, int range, int minpeakvalue,
-			int trim) {
-		List<Temperature> result = new ArrayList<Temperature>();
+	public static List<TemperatureReading> FindPeaksInDataset(List<TemperatureReading> dataset, int range,
+			int minpeakvalue, int trim) {
+		List<TemperatureReading> result = new ArrayList<TemperatureReading>();
 		if (dataset == null) {
 			return null;
 		}

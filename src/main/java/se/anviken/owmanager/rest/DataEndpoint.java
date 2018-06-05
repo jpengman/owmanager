@@ -1,5 +1,6 @@
 package se.anviken.owmanager.rest;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,7 @@ import com.google.visualization.datasource.render.JsonRenderer;
 
 import se.anviken.owmanager.Constants;
 import se.anviken.owmanager.model.MinAvgMax;
-import se.anviken.owmanager.model.Temperature;
+import se.anviken.owmanager.model.TemperatureReading;
 import se.anviken.owmanager.persist.PersistenceHelper;
 import se.anviken.owmanager.utils.DataUtil;
 
@@ -30,7 +31,6 @@ import se.anviken.owmanager.utils.DataUtil;
 @Stateless
 @Path("/data")
 public class DataEndpoint extends PersistenceHelper {
-	public static final int DEFAULT_NO_OF_MINUTES = 60;
 
 	@GET
 	@Path("/")
@@ -46,26 +46,25 @@ public class DataEndpoint extends PersistenceHelper {
 				+ "getminavgmax API: getminavgmax/{type}/{id}\n"
 				+ "type = Type of graph, allowed values:days,weeks,months,years\n" + "id = Sensor ID\n\n"
 
+				+ "getmeterdatatable API: getmeterdatatable/{id}/{noofminutes}\n" + "ids = Meter ID:s comma separated\n"
+				+ "noofminutes = Size of dataset in minutes (Default:" + DataEndpoint.DEFAULT_NO_OF_MINUTES + ")\n\n"
+
 				+ "getpeaks API: /getpeaks/{id:[0-9][0-9]*}/{noofminutes}/{range}/{minpeakvalue}\n" + "id = Sensor ID\n"
 				+ "noofminutes = Size of dataset in minutes (Default:" + DataEndpoint.DEFAULT_NO_OF_MINUTES + ")\n"
 				+ "range = The range of the peak (Default:" + DataUtil.DEFAULT_PEAK_RANGE + ")\n"
 				+ "minpeakvalue = Minimun value of peak (Default:" + DataUtil.DEFAULT_MIN_PEAK_VALUE + ")\n\n"
 
-				+ "getnoofpeaks API: /getnoofpeaks/{id}/{noofminutes}/{range}/{minpeakvalue}/{trimrange}\n"
-				+ "id = Sensor ID\n" + "noofminutes = Size of dataset in minutes (Default:"
-				+ DataEndpoint.DEFAULT_NO_OF_MINUTES + ")\n" + "range = The range of the peak (Default:"
-				+ DataUtil.DEFAULT_PEAK_RANGE + ")\n" + "minpeakvalue = Minimun value of peak (Default:"
-				+ DataUtil.DEFAULT_MIN_PEAK_VALUE + ")\n"
+				+ "getnoofpeaks API: /getnoofpeaks/{id}/{timeframe}/{range}/{minpeakvalue}/{trimrange}\n"
+				+ "id = Sensor ID\n" + "timeframe = Size of dataset in minutes (Default:"
+				+ DataEndpoint.DEFAULT_NO_OF_MINUTES + ") or date in yyymmdd format\n"
+				+ "range = The range of the peak (Default:" + DataUtil.DEFAULT_PEAK_RANGE + ")\n"
+				+ "minpeakvalue = Minimun value of peak (Default:" + DataUtil.DEFAULT_MIN_PEAK_VALUE + ")\n"
 				+ "trimrange = Values outside the trimrange are excluded(Default:" + DataUtil.DEFAULT_TRIM_RANGE
 				+ ")\n\n"
 
 				+ "temperature API: /temperature/{id}\n" + "id = Sensor ID\n\n";
 
 		return returnString;
-	}
-
-	private List<Temperature> getDataSet(int id) {
-		return getDataSet(id, DEFAULT_NO_OF_MINUTES);
 	}
 
 	@GET
@@ -80,6 +79,14 @@ public class DataEndpoint extends PersistenceHelper {
 	@Produces("application/json")
 	public Response getDataTableByIdAndTime(@PathParam("ids") String ids, @PathParam("noofminutes") int noofminutes) {
 		return getDatatable(ids, noofminutes);
+	}
+
+	@GET
+	@Path("/getmeterdatatable/{ids}/{noofminutes:[0-9][0-9]*}")
+	@Produces("application/json")
+	public Response getMeterDataTableByIdAndTime(@PathParam("ids") String ids,
+			@PathParam("noofminutes") int noofminutes) {
+		return getMeterDatatable(ids, noofminutes);
 	}
 
 	/// getdatatablebytype/{type}/{noofminutes}
@@ -220,21 +227,22 @@ public class DataEndpoint extends PersistenceHelper {
 	@GET
 	@Path("/getpeaks/{id:[0-9][0-9]*}")
 	@Produces("application/json")
-	public List<Temperature> getPeaksById(@PathParam("id") int id) {
+	public List<TemperatureReading> getPeaksById(@PathParam("id") int id) {
 		return DataUtil.FindPeaksInDataset(getDataSet(id));
 	}
 
 	@GET
 	@Path("/getpeaks/{id:[0-9][0-9]*}/{noofminutes:[0-9][0-9]*}")
 	@Produces("application/json")
-	public List<Temperature> getPeaksByIdAndTime(@PathParam("id") int id, @PathParam("noofminutes") int noofminutes) {
+	public List<TemperatureReading> getPeaksByIdAndTime(@PathParam("id") int id,
+			@PathParam("noofminutes") int noofminutes) {
 		return DataUtil.FindPeaksInDataset(getDataSet(id, noofminutes));
 	}
 
 	@GET
 	@Path("/getpeaks/{id:[0-9][0-9]*}/{noofminutes:[0-9][0-9]*}/{range:[0-9][0-9]*}")
 	@Produces("application/json")
-	public List<Temperature> getPeaksByIdTimeAndRange(@PathParam("id") int id,
+	public List<TemperatureReading> getPeaksByIdTimeAndRange(@PathParam("id") int id,
 			@PathParam("noofminutes") int noofminutes, @PathParam("range") int range) {
 		return DataUtil.FindPeaksInDataset(getDataSet(id, noofminutes), range);
 	}
@@ -242,7 +250,7 @@ public class DataEndpoint extends PersistenceHelper {
 	@GET
 	@Path("/getpeaks/{id:[0-9][0-9]*}/{noofminutes:[0-9][0-9]*}/{range:[0-9][0-9]*}/{minpeakvalue:[0-9][0-9]*}")
 	@Produces("application/json")
-	public List<Temperature> getPeaksByIdTimeRangeAndMinValue(@PathParam("id") int id,
+	public List<TemperatureReading> getPeaksByIdTimeRangeAndMinValue(@PathParam("id") int id,
 			@PathParam("noofminutes") int noofminutes, @PathParam("range") int range,
 			@PathParam("minpeakvalue") int minpeakvalue) {
 		return DataUtil.FindPeaksInDataset(getDataSet(id, noofminutes), range, minpeakvalue);
@@ -271,11 +279,18 @@ public class DataEndpoint extends PersistenceHelper {
 	}
 
 	@GET
-	@Path("/getnoofpeaks/{id:[0-9][0-9]*}/{noofminutes:[0-9][0-9]*}/{range:[0-9][0-9]*}/{minpeakvalue:[0-9][0-9]*}")
+	@Path("/getnoofpeaks/{id:[0-9][0-9]*}/{timeframe}/{range:[0-9][0-9]*}/{minpeakvalue:[0-9][0-9]*}")
 	@Produces("application/json")
-	public int getNoOfPeaksByIdTimeRangeAndMinValue(@PathParam("id") int id, @PathParam("noofminutes") int noofminutes,
-			@PathParam("range") int range, @PathParam("minpeakvalue") int minpeakvalue) {
-		return DataUtil.FindPeaksInDataset(getDataSet(id, noofminutes), range, minpeakvalue).size();
+	public int getNoOfPeaksByIdTimeRangeAndMinValue(@PathParam("id") int id, @PathParam("timeframe") String timeframe,
+			@PathParam("range") int range, @PathParam("minpeakvalue") int minpeakvalue) throws NumberFormatException {
+
+		try {
+			return DataUtil.FindPeaksInDataset(getDataSet(id, timeframe), range, minpeakvalue).size();
+
+		} catch (ParseException e) {
+			int noofminutes = Integer.parseInt(timeframe);
+			return DataUtil.FindPeaksInDataset(getDataSet(id, noofminutes), range, minpeakvalue).size();
+		}
 	}
 
 	@GET
