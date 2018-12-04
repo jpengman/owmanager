@@ -25,9 +25,12 @@ import com.google.visualization.datasource.base.TypeMismatchException;
 import com.google.visualization.datasource.datatable.ColumnDescription;
 import com.google.visualization.datasource.datatable.DataTable;
 import com.google.visualization.datasource.datatable.TableRow;
+import com.google.visualization.datasource.datatable.value.DateTimeValue;
 import com.google.visualization.datasource.datatable.value.Value;
 import com.google.visualization.datasource.datatable.value.ValueType;
 import com.google.visualization.datasource.render.JsonRenderer;
+import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.TimeZone;
 
 import se.anviken.owmanager.Constants;
 import se.anviken.owmanager.dto.TemperatureDTO;
@@ -150,7 +153,7 @@ public class PersistenceHelper {
 	private Response createMeterDataTable(int noofdays, final List<MeterType> meterTypes) {
 		DataTable data = new DataTable();
 		ArrayList<ColumnDescription> cd = new ArrayList<ColumnDescription>();
-		cd.add(new ColumnDescription("Tid", ValueType.TEXT, "Tid"));
+		cd.add(new ColumnDescription("Tid", ValueType.NUMBER, "Tid"));
 
 		List<Map<Date, Float>> meterLists = new ArrayList<Map<Date, Float>>();
 		Set<Date> timestamps = new HashSet<Date>();
@@ -168,7 +171,7 @@ public class PersistenceHelper {
 		timestamps = new TreeSet<Date>(timestamps);
 		for (Date timestamp : timestamps) {
 			TableRow row = new TableRow();
-			row.addCell(TimeUtil.getDateAndTime(timestamp));
+			row.addCell(timestamp.getTime());
 			for (Map<Date, Float> meterList : meterLists) {
 				if (meterList.get(timestamp) != null) {
 					row.addCell(meterList.get(timestamp));
@@ -195,6 +198,7 @@ public class PersistenceHelper {
 	 * @return fixed JSON string
 	 */
 	private String fixJson(String string) {
+
 		return string.replaceAll(",,", ",{\"v\":null},");
 	}
 

@@ -1,5 +1,9 @@
 package se.anviken.owmanager.rest;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -48,7 +52,8 @@ public class SVGEndpoint extends PersistenceHelper {
 		indoorText.setTextAnchor("middle");
 		outdoorText.setTextAnchor("middle");
 		outdoorText.setFill("rgb(" + ColorUtil.shaderBYR(outdoorTemp, -5, 15, 30) + ")");
-
+		Text tankTempText = new Text(String.valueOf(round(getTankTemp(), 1)), 255, 145, 20, "Verdana");
+		tankTempText.setFill("white");
 		LinearGradient accLG = new LinearGradient("accLG", "0%", "0%", "0%", "100%");
 		LinearGradient hpLG = new LinearGradient("hpLG", "0%", "0%", "0%", "100%");
 		LinearGradient rulerLG = new LinearGradient("rulerLG", "0%", "0%", "100%", "0%");
@@ -87,6 +92,7 @@ public class SVGEndpoint extends PersistenceHelper {
 		svg.addShape(rulerText1);
 		svg.addShape(rulerText2);
 		svg.addShape(rulerText3);
+		svg.addShape(tankTempText);
 		svg.addShape(house);
 		svg.addShape(indoorText);
 		svg.addShape(outdoorText);
@@ -110,4 +116,23 @@ public class SVGEndpoint extends PersistenceHelper {
 		return lg;
 	}
 
+	private double getTankTemp() {
+		TypedQuery<Sensor> findAllQuery = em.createQuery(
+				"SELECT DISTINCT s FROM Sensor s LEFT JOIN FETCH s.sensorType st WHERE st.sensorType ='HEATING_ACC' ORDER BY s.name",
+				Sensor.class);
+		List<Sensor> resultList = findAllQuery.getResultList();
+		double temp = 0;
+		for (Sensor sensor : resultList) {
+			temp = temp + sensor.getLastLoggedTemp();
+		}
+		return temp / resultList.size();
+	}
+
+	public static double round(double value, int places) {
+		if (places < 0)
+			throw new IllegalArgumentException();
+		BigDecimal bd = new BigDecimal(value);
+		bd = bd.setScale(places, RoundingMode.HALF_UP);
+		return bd.doubleValue();
+	}
 }

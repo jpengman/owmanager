@@ -27,6 +27,9 @@ public class MeterType implements Serializable {
 	@Column(name = "meter_type")
 	private String meterType;
 
+	@Column(name = "name")
+	private String name;
+
 	public MeterType() {
 	}
 
@@ -52,6 +55,14 @@ public class MeterType implements Serializable {
 
 	public void setMeterType(String meterType) {
 		this.meterType = meterType;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }
